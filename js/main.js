@@ -24,5 +24,5 @@ const getRandomFloat = (min, max, numberDecimals) => {
   return randomValue.toFixed(numberDecimals);
 };
 
-console.log(getRandomInteger(5, -7));
-console.log(getRandomFloat(5.2, 8.2, -2));
+getRandomInteger(5, -7);
+getRandomFloat(5.2, 8.2, -2);
