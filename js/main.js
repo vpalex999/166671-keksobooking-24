@@ -88,13 +88,13 @@ const randomFeature = () => {
 };
 
 const randomArrayItems = (sizeArray, randomFunc) => {
-
-  while (true) {
+  const isWork = true;
+  while (isWork) {
     let isContinue = true;
     const features = Array.from({ length: sizeArray }, randomFunc);
 
-    for (let i = 0; i <= features.length - 1; i++) {
-      const countItem = features.filter((item) => item === features[i]);
+    for (let index = 0; index <= features.length - 1; index++) {
+      const countItem = features.filter((item) => item === features[index]);
 
       if (countItem.length > 1) {
         isContinue = true;
