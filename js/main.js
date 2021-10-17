@@ -1,4 +1,4 @@
-import { setInactiveState, setActiveState } from './form.js'
+import { setInactiveState, setActiveState } from './form.js';
 
 setInactiveState();
 setActiveState();
