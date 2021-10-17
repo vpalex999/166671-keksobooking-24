@@ -1,1 +1,3 @@
-import './template.js';
+import {setInactiveStateFormNotice} from './form.js'
+
+setInactiveStateFormNotice();
