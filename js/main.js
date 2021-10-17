@@ -1,3 +1,4 @@
-import {setInactiveStateFormNotice} from './form.js'
+import { setInactiveState, setActiveState } from './form.js'
 
-setInactiveStateFormNotice();
+setInactiveState();
+setActiveState();
