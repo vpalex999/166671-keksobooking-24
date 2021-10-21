@@ -1,5 +1,41 @@
-
 const formNoticeElement = document.querySelector('.ad-form');
+const titleInputElement = formNoticeElement.querySelector('#title');
+const priceInputElement = formNoticeElement.querySelector('#price');
+const roomNumberElement = formNoticeElement.querySelector('#room_number');
+const capacityElement = formNoticeElement.querySelector('#capacity');
+
+const setCapacity = (rooms) => {
+  const capacityListElement = capacityElement.querySelectorAll('option');
+
+  capacityListElement.forEach((capacity) => {
+    capacity.style.display = 'none';
+    capacity.removeAttribute('selected');
+  });
+
+  if (rooms === 100) {
+    capacityListElement.forEach((capacity) => {
+      const capacityNums = Number(capacity.value);
+      if (capacityNums === 0) {
+        capacity.style.display = '';
+      }
+    });
+  } else {
+    capacityListElement.forEach((capacity) => {
+      const capacityNums = Number(capacity.value);
+      if (rooms >= capacityNums && capacityNums !== 0) {
+        capacity.style.display = '';
+      }
+    });
+  }
+
+  for (const capacity of capacityListElement) {
+    if (capacity.style.display !== 'none') {
+      capacity.setAttribute('selected', 'selected');
+      break;
+    }
+  }
+};
+
 
 const setInactiveStateFormNotice = () => {
   formNoticeElement.classList.add('ad-form--disabled');
@@ -14,6 +50,34 @@ const setActiveStateFormMapFilters = () => {
 
   formNoticeElement.classList.remove('ad-form--disabled');
 };
+
+titleInputElement.addEventListener('invalid', () => {
+  if (titleInputElement.validity.tooShort) {
+    titleInputElement.setCustomValidity('Заголовок объявления должен состоять минимум их 30-ти символов');
+  } else if (titleInputElement.validity.tooLong) {
+    titleInputElement.setCustomValidity('Заголовок объявления не должен превышать 100 символов');
+  } else if (titleInputElement.validity.valueMissing) {
+    titleInputElement.setCustomValidity('Обязательное поле');
+  } else {
+    titleInputElement.setCustomValidity('');
+  }
+});
+
+priceInputElement.addEventListener('invalid', () => {
+  if (priceInputElement.validity.rangeOverflow) {
+    priceInputElement.setCustomValidity('Цена за ночь не должна превышать значения 1000000');
+  } else if (priceInputElement.validity.valueMissing) {
+    priceInputElement.setCustomValidity('Обязательное поле');
+  } else {
+    priceInputElement.setCustomValidity('');
+  }
+});
+
+roomNumberElement.addEventListener('change', (evt) => {
+  const roomsNumber = Number(evt.target.value);
+  setCapacity(roomsNumber);
+});
+
 
 const formMapFiltersElement = document.querySelector('.map__filters');
 

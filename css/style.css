@@ -641,6 +641,10 @@ fieldset {
           box-shadow: 0 0 2px 2px #ff6547;
 }
 
+#title:invalid:required,
+#price:invalid:required {
+  border: 2px solid red;
+}
 
 /* Футер
    ========================================================================== */
