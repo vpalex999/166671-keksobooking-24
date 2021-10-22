@@ -86,14 +86,16 @@ const onPriceInputValidation = () => {
   }
 };
 
+const onRoomNumberValidation = (evt) => {
+  const roomsNumber = Number(evt.target.value);
+  setCapacity(roomsNumber);
+};
+
 typeHousingElement.addEventListener('change', onTypeHousingChange);
 
 priceInputElement.addEventListener('invalid', onPriceInputValidation);
 
-roomNumberElement.addEventListener('change', (evt) => {
-  const roomsNumber = Number(evt.target.value);
-  setCapacity(roomsNumber);
-});
+roomNumberElement.addEventListener('change', onRoomNumberValidation);
 
 
 const formMapFiltersElement = document.querySelector('.map__filters');
