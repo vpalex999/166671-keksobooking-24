@@ -1,5 +1,8 @@
+import { getMinimalPriceFromTypeHousing } from './util.js';
+
 const formNoticeElement = document.querySelector('.ad-form');
 const titleInputElement = formNoticeElement.querySelector('#title');
+const typeHousingElement = formNoticeElement.querySelector('#type');
 const priceInputElement = formNoticeElement.querySelector('#price');
 const roomNumberElement = formNoticeElement.querySelector('#room_number');
 const capacityElement = formNoticeElement.querySelector('#capacity');
@@ -63,15 +66,29 @@ titleInputElement.addEventListener('invalid', () => {
   }
 });
 
-priceInputElement.addEventListener('invalid', () => {
-  if (priceInputElement.validity.rangeOverflow) {
+
+const onTypeHousingChange = (evt) => {
+  const price = getMinimalPriceFromTypeHousing(evt.target.value);
+  priceInputElement.setAttribute('placeholder', price);
+  priceInputElement.setAttribute('min', price);
+};
+
+const onPriceInputVAlidation = () => {
+  if (priceInputElement.validity.rangeUnderflow) {
+    const minimalPrice = priceInputElement.getAttribute('min');
+    priceInputElement.setCustomValidity(`Цена за ночь не должна быть меньше ${minimalPrice}`);
+  } else if (priceInputElement.validity.rangeOverflow) {
     priceInputElement.setCustomValidity('Цена за ночь не должна превышать значения 1000000');
   } else if (priceInputElement.validity.valueMissing) {
     priceInputElement.setCustomValidity('Обязательное поле');
   } else {
     priceInputElement.setCustomValidity('');
   }
-});
+};
+
+typeHousingElement.addEventListener('change', onTypeHousingChange);
+
+priceInputElement.addEventListener('invalid', onPriceInputVAlidation);
 
 roomNumberElement.addEventListener('change', (evt) => {
   const roomsNumber = Number(evt.target.value);

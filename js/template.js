@@ -1,5 +1,7 @@
 import { createWizardNotice } from './data.js';
 
+// TODO:
+// перенести в utils
 const getNameOfPlace = (type) => {
   switch (type) {
     case 'flat':
