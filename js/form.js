@@ -54,7 +54,7 @@ const setActiveStateFormMapFilters = () => {
   formNoticeElement.classList.remove('ad-form--disabled');
 };
 
-titleInputElement.addEventListener('invalid', () => {
+const onTitleInputValidation = () => {
   if (titleInputElement.validity.tooShort) {
     titleInputElement.setCustomValidity('Заголовок объявления должен состоять минимум их 30-ти символов');
   } else if (titleInputElement.validity.tooLong) {
@@ -64,8 +64,7 @@ titleInputElement.addEventListener('invalid', () => {
   } else {
     titleInputElement.setCustomValidity('');
   }
-});
-
+};
 
 const onTypeHousingChange = (evt) => {
   const price = getMinimalPriceFromTypeHousing(evt.target.value);
@@ -91,10 +90,9 @@ const onRoomNumberValidation = (evt) => {
   setCapacity(roomsNumber);
 };
 
+titleInputElement.addEventListener('invalid', onTitleInputValidation);
 typeHousingElement.addEventListener('change', onTypeHousingChange);
-
 priceInputElement.addEventListener('invalid', onPriceInputValidation);
-
 roomNumberElement.addEventListener('change', onRoomNumberValidation);
 
 
