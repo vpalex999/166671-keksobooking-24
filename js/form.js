@@ -73,7 +73,7 @@ const onTypeHousingChange = (evt) => {
   priceInputElement.setAttribute('min', price);
 };
 
-const onPriceInputVAlidation = () => {
+const onPriceInputValidation = () => {
   if (priceInputElement.validity.rangeUnderflow) {
     const minimalPrice = priceInputElement.getAttribute('min');
     priceInputElement.setCustomValidity(`Цена за ночь не должна быть меньше ${minimalPrice}`);
@@ -88,7 +88,7 @@ const onPriceInputVAlidation = () => {
 
 typeHousingElement.addEventListener('change', onTypeHousingChange);
 
-priceInputElement.addEventListener('invalid', onPriceInputVAlidation);
+priceInputElement.addEventListener('invalid', onPriceInputValidation);
 
 roomNumberElement.addEventListener('change', (evt) => {
   const roomsNumber = Number(evt.target.value);
