@@ -24,8 +24,43 @@ const getRandomFloat = (min, max, numberDecimals) => {
   return randomValue.toFixed(numberDecimals);
 };
 
+const getMinimalPriceFromTypeHousing = (nameType) => {
+  switch (nameType) {
+    case 'flat':
+      return 1000;
+    case 'bungalow':
+      return 0;
+    case 'house':
+      return 5000;
+    case 'palace':
+      return 10000;
+    case 'hotel':
+      return 3000;
+    default:
+      return 0;
+  }
+};
+
+const getNameOfPlace = (type) => {
+  switch (type) {
+    case 'flat':
+      return 'Квартира';
+    case 'bungalow':
+      return 'Бунгало';
+    case 'house':
+      return 'Дом';
+    case 'palace':
+      return 'Дворец';
+    case 'hotel':
+      return 'Отель';
+    default:
+      return `Неизвестный тип помещения: ${type}`;
+  }
+};
 
 export {
   getRandomInteger,
-  getRandomFloat
+  getRandomFloat,
+  getMinimalPriceFromTypeHousing,
+  getNameOfPlace
 };

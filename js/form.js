@@ -1,5 +1,8 @@
+import { getMinimalPriceFromTypeHousing } from './util.js';
+
 const formNoticeElement = document.querySelector('.ad-form');
 const titleInputElement = formNoticeElement.querySelector('#title');
+const typeHousingElement = formNoticeElement.querySelector('#type');
 const priceInputElement = formNoticeElement.querySelector('#price');
 const roomNumberElement = formNoticeElement.querySelector('#room_number');
 const capacityElement = formNoticeElement.querySelector('#capacity');
@@ -51,7 +54,7 @@ const setActiveStateFormMapFilters = () => {
   formNoticeElement.classList.remove('ad-form--disabled');
 };
 
-titleInputElement.addEventListener('invalid', () => {
+const onTitleInputValidation = () => {
   if (titleInputElement.validity.tooShort) {
     titleInputElement.setCustomValidity('Заголовок объявления должен состоять минимум их 30-ти символов');
   } else if (titleInputElement.validity.tooLong) {
@@ -61,22 +64,36 @@ titleInputElement.addEventListener('invalid', () => {
   } else {
     titleInputElement.setCustomValidity('');
   }
-});
+};
 
-priceInputElement.addEventListener('invalid', () => {
-  if (priceInputElement.validity.rangeOverflow) {
+const onTypeHousingChange = (evt) => {
+  const price = getMinimalPriceFromTypeHousing(evt.target.value);
+  priceInputElement.setAttribute('placeholder', price);
+  priceInputElement.setAttribute('min', price);
+};
+
+const onPriceInputValidation = () => {
+  if (priceInputElement.validity.rangeUnderflow) {
+    const minimalPrice = priceInputElement.getAttribute('min');
+    priceInputElement.setCustomValidity(`Цена за ночь не должна быть меньше ${minimalPrice}`);
+  } else if (priceInputElement.validity.rangeOverflow) {
     priceInputElement.setCustomValidity('Цена за ночь не должна превышать значения 1000000');
   } else if (priceInputElement.validity.valueMissing) {
     priceInputElement.setCustomValidity('Обязательное поле');
   } else {
     priceInputElement.setCustomValidity('');
   }
-});
+};
 
-roomNumberElement.addEventListener('change', (evt) => {
+const onRoomNumberValidation = (evt) => {
   const roomsNumber = Number(evt.target.value);
   setCapacity(roomsNumber);
-});
+};
+
+titleInputElement.addEventListener('invalid', onTitleInputValidation);
+typeHousingElement.addEventListener('change', onTypeHousingChange);
+priceInputElement.addEventListener('invalid', onPriceInputValidation);
+roomNumberElement.addEventListener('change', onRoomNumberValidation);
 
 
 const formMapFiltersElement = document.querySelector('.map__filters');
