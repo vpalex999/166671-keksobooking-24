@@ -1,23 +1,5 @@
 import { createWizardNotice } from './data.js';
-
-// TODO:
-// перенести в utils
-const getNameOfPlace = (type) => {
-  switch (type) {
-    case 'flat':
-      return 'Квартира';
-    case 'bungalow':
-      return 'Бунгало';
-    case 'house':
-      return 'Дом';
-    case 'palace':
-      return 'Дворец';
-    case 'hotel':
-      return 'Отель';
-    default:
-      return `Неизвестный тип помещения: ${type}`;
-  }
-};
+import { getNameOfPlace } from './utils.js';
 
 const hideElement = (element) => element.style.display = 'none';
 
