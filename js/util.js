@@ -58,9 +58,15 @@ const getNameOfPlace = (type) => {
   }
 };
 
+const latLngToAddress = (latLng) => {
+  const { lat, lng } = latLng;
+  return `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+};
+
 export {
   getRandomInteger,
   getRandomFloat,
   getMinimalPriceFromTypeHousing,
-  getNameOfPlace
+  getNameOfPlace,
+  latLngToAddress
 };
