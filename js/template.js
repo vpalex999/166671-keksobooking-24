@@ -1,5 +1,4 @@
-import { createWizardNotice } from './data.js';
-import { getNameOfPlace } from './utils.js';
+import { getNameOfPlace } from './util.js';
 
 const hideElement = (element) => element.style.display = 'none';
 
@@ -97,8 +96,4 @@ const createCardElement = (notice) => {
   return cardElement;
 };
 
-const noticeList = Array.from({ length: 10 }, createWizardNotice);
-const cards = noticeList.map((notice) => createCardElement(notice));
-
-const mapElement = document.querySelector('#map-canvas');
-mapElement.appendChild(cards[0]);
+export { createCardElement };

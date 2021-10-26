@@ -1,7 +1,8 @@
-import { getMinimalPriceFromTypeHousing } from './util.js';
+import { getMinimalPriceFromTypeHousing, latLngToAddress } from './util.js';
 
 const formNoticeElement = document.querySelector('.ad-form');
 const titleInputElement = formNoticeElement.querySelector('#title');
+const addressInputElement = formNoticeElement.querySelector('#address');
 const typeHousingElement = formNoticeElement.querySelector('#type');
 const priceInputElement = formNoticeElement.querySelector('#price');
 const roomNumberElement = formNoticeElement.querySelector('#room_number');
@@ -39,7 +40,6 @@ const setCapacity = (rooms) => {
   }
 };
 
-
 const setInactiveStateFormNotice = () => {
   formNoticeElement.classList.add('ad-form--disabled');
 
@@ -50,8 +50,11 @@ const setInactiveStateFormNotice = () => {
 const setActiveStateFormMapFilters = () => {
   const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
   fieldsetListElement.forEach((fieldset) => fieldset.removeAttribute('disabled'));
-
   formNoticeElement.classList.remove('ad-form--disabled');
+};
+
+const setAddressInput = (lanLng) => {
+  addressInputElement.value = latLngToAddress(lanLng);
 };
 
 const onTitleInputValidation = () => {
@@ -107,13 +110,15 @@ const setInactiveStateFormMapFilters = () => {
   mapFeaturesElement.setAttribute('disabled', true);
 };
 
-const setActiveStateFormNotice = () => {
+const setActiveStateFormNotice = (map) => {
   const mapFiltersElement = formMapFiltersElement.querySelectorAll('.map__filter');
   mapFiltersElement.forEach((mapFilter) => mapFilter.removeAttribute('disabled'));
 
   const mapFeaturesElement = formMapFiltersElement.querySelector('#housing-features');
   mapFeaturesElement.removeAttribute('disabled');
   formMapFiltersElement.classList.remove('map__filters--disabled');
+
+  setAddressInput(map.getCenter());
 };
 
 const setInactiveState = () => {
@@ -122,12 +127,13 @@ const setInactiveState = () => {
 };
 
 
-const setActiveState = () => {
+const setActiveState = (map) => {
   setActiveStateFormMapFilters();
-  setActiveStateFormNotice();
+  setActiveStateFormNotice(map);
 };
 
 export {
   setInactiveState,
-  setActiveState
+  setActiveState,
+  setAddressInput
 };
