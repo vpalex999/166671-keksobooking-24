@@ -53,6 +53,8 @@ const setActiveStateFormMapFilters = () => {
   formNoticeElement.classList.remove('ad-form--disabled');
 };
 
+// TODO:
+// Принимать адрес как строку, координаты не нужны
 const setAddressInput = (lanLng) => {
   addressInputElement.value = latLngToAddress(lanLng);
 };

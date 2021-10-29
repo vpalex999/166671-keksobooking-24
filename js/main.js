@@ -1,6 +1,12 @@
-import { createCustomRegularMarker } from './map.js';
-import { createWizardNotice } from './data.js';
+import { displayNoticeList } from './map.js';
 
-const noticeList = Array.from({length: 5}, createWizardNotice);
-noticeList.map((notice) => createCustomRegularMarker(notice));
+// TODO:
+// Проверить все атрибуты(название, тип данных), полученные от сервера
+
+fetch('https://24.javascript.pages.academy/keksobooking/data')
+  .then((response) => response.json())
+  .then((noticeList) => {
+    console.log(noticeList[0]);
+    displayNoticeList(noticeList);
+  });
 

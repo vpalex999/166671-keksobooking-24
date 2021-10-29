@@ -41,22 +41,17 @@ const mainPinMarker = L.marker(
 );
 
 
-const getRegularMarker = (fromAddress) => {
-  const latLng = fromAddress.split(',').map((item) => item.trim());
-  const [lat, lng] = latLng;
-  return L.marker(
-    {
-      lat: lat,
-      lng: lng,
-    },
+const getRegularMarker = ({ location }) =>
+  L.marker(
+    location,
     {
       icon: regularPinIcon,
     },
   );
-};
+
 
 const createCustomRegularMarker = (notice) =>
-  getRegularMarker(notice.offer.address)
+  getRegularMarker(notice)
     .addTo(map)
     .bindPopup(createCardElement(notice));
 
@@ -68,4 +63,8 @@ map.on('load', setActiveState(map));
 mainPinMarker.addTo(map);
 mainPinMarker.addEventListener('moveend', onAddressInput);
 
-export { createCustomRegularMarker };
+const displayNoticeList = (noticeList) => {
+  noticeList.forEach((notice) => createCustomRegularMarker(notice));
+};
+
+export { displayNoticeList };
