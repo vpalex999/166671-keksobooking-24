@@ -6,13 +6,30 @@ const getData = (onSucces, onFail) => {
       if (response.ok) {
         return response;
       }
-      throw new Error(`Ошибка получения данных. ${response.status} - ${response.statusText}`);
+      throw new Error(`${response.status} - ${response.statusText}`);
     })
     .then((response) => response.json())
     .then((noticeList) => {
       onSucces(noticeList);
     })
-    .catch((onFail));
+    .catch((error) => onFail(`Ошибка получения данных. ${error}`));
 };
 
-export { getData };
+const sendData = (onFail, body) => {
+  fetch(
+    'https://24.javascript.pages.academy/keksobooking',
+    {
+      method: 'POST',
+      body,
+    },
+  )
+    .then((response) => {
+      if (response.ok) {
+        return response;
+      }
+      throw new Error(`${response.status} - ${response.statusText}`);
+    })
+    .catch((error) => onFail(`Не удалось отправить данные. ${error}`));
+};
+
+export { getData, sendData };

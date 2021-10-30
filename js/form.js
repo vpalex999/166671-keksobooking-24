@@ -1,4 +1,6 @@
 import { getMinimalPriceFromTypeHousing, latLngToAddress } from './util.js';
+import { displayError } from './error.js';
+import { sendData } from './api.js';
 
 const formNoticeElement = document.querySelector('.ad-form');
 const titleInputElement = formNoticeElement.querySelector('#title');
@@ -38,19 +40,6 @@ const setCapacity = (rooms) => {
       break;
     }
   }
-};
-
-const setInactiveStateFormNotice = () => {
-  formNoticeElement.classList.add('ad-form--disabled');
-
-  const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
-  fieldsetListElement.forEach((fieldset) => fieldset.setAttribute('disabled', true));
-};
-
-const setActiveStateFormMapFilters = () => {
-  const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
-  fieldsetListElement.forEach((fieldset) => fieldset.removeAttribute('disabled'));
-  formNoticeElement.classList.remove('ad-form--disabled');
 };
 
 const setAddressInput = (lanLng) => {
@@ -98,16 +87,21 @@ typeHousingElement.addEventListener('change', onTypeHousingChange);
 priceInputElement.addEventListener('invalid', onPriceInputValidation);
 roomNumberElement.addEventListener('change', onRoomNumberValidation);
 
+formNoticeElement.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  sendData(
+    displayError,
+    new FormData(evt.target),
+  );
+});
 
 const formMapFiltersElement = document.querySelector('.map__filters');
 
-const setInactiveStateFormMapFilters = () => {
-  formMapFiltersElement.classList.add('map__filters--disabled');
-  const mapFiltersElement = formMapFiltersElement.querySelectorAll('.map__filter');
-  mapFiltersElement.forEach((mapFilter) => mapFilter.setAttribute('disabled', true));
+const setInactiveStateFormNotice = () => {
+  formNoticeElement.classList.add('ad-form--disabled');
 
-  const mapFeaturesElement = formMapFiltersElement.querySelector('#housing-features');
-  mapFeaturesElement.setAttribute('disabled', true);
+  const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
+  fieldsetListElement.forEach((fieldset) => fieldset.setAttribute('disabled', true));
 };
 
 const setActiveStateFormNotice = (map) => {
@@ -120,6 +114,22 @@ const setActiveStateFormNotice = (map) => {
 
   setAddressInput(map.getCenter());
 };
+
+const setActiveStateFormMapFilters = () => {
+  const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
+  fieldsetListElement.forEach((fieldset) => fieldset.removeAttribute('disabled'));
+  formNoticeElement.classList.remove('ad-form--disabled');
+};
+
+const setInactiveStateFormMapFilters = () => {
+  formMapFiltersElement.classList.add('map__filters--disabled');
+  const mapFiltersElement = formMapFiltersElement.querySelectorAll('.map__filter');
+  mapFiltersElement.forEach((mapFilter) => mapFilter.setAttribute('disabled', true));
+
+  const mapFeaturesElement = formMapFiltersElement.querySelector('#housing-features');
+  mapFeaturesElement.setAttribute('disabled', true);
+};
+
 
 const setInactiveState = () => {
   setInactiveStateFormMapFilters();

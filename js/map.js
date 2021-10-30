@@ -1,7 +1,5 @@
-import { setActiveState, setInactiveState, setAddressInput } from './form.js';
+import { setAddressInput } from './form.js';
 import { createCardElement } from './template.js';
-
-setInactiveState();
 
 const map = L.map('map-canvas')
   .setView({
@@ -59,7 +57,6 @@ const onAddressInput = (evt) => {
   setAddressInput(evt.target.getLatLng());
 };
 
-map.on('load', setActiveState(map));
 mainPinMarker.addTo(map);
 mainPinMarker.addEventListener('moveend', onAddressInput);
 
@@ -67,4 +64,4 @@ const displayNoticeList = (noticeList) => {
   noticeList.forEach((notice) => createCustomRegularMarker(notice));
 };
 
-export { displayNoticeList };
+export { map, displayNoticeList };

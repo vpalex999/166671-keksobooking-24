@@ -1,5 +1,5 @@
 
-const displayError = (error) => {
+const displayError = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = 100;
   alertContainer.style.position = 'absolute';
@@ -10,7 +10,7 @@ const displayError = (error) => {
   alertContainer.style.fontSize = '30px';
   alertContainer.style.textAlign = 'center';
   alertContainer.style.backgroundColor = 'red';
-  alertContainer.textContent = error;
+  alertContainer.textContent = message;
 
   document.body.append(alertContainer);
 };
