@@ -1,7 +1,7 @@
 import { getMinimalPriceFromTypeHousing, latLngToAddress } from './util.js';
 import { displayError } from './error.js';
 import { sendData } from './api.js';
-import { initAddressMarker} from './map.js';
+import { initAddressMarker } from './map.js';
 
 const formNoticeElement = document.querySelector('.ad-form');
 const avatarInputElement = formNoticeElement.querySelector('#avatar');
@@ -100,7 +100,7 @@ const onSubmitFormNotice = (evt) => {
 
 // TODO:
 // перенести selectSelectElement функцию в утилиты
-const selectSelectElement = (selectElement, indexOption=0) => {
+const selectSelectElement = (selectElement, indexOption = 0) => {
   const listElement = selectElement.querySelectorAll('option');
   listElement.forEach((element) => element.removeAttribute('selected'));
   selectElement.value = '';
@@ -109,26 +109,27 @@ const selectSelectElement = (selectElement, indexOption=0) => {
 
 const resetallInputsFormNotice = () => {
   avatarInputElement.value = '';
-    titleInputElement.value = '';
-  
-    priceInputElement.value = '';
-    priceInputElement.setAttribute('placeholder', '5000');
+  titleInputElement.value = '';
 
-    selectSelectElement(typeHousingSelectElement);
-    selectSelectElement(timeInSelectElement);
-    selectSelectElement(timeOutSelectElement);
-    selectSelectElement(typeHousingSelectElement, 1);
-    selectSelectElement(roomNumberSelectElement);
-    selectSelectElement(capacitySelectElement, 2);
-    featuresInputList.forEach((element) => element.checked = false);
-    descriptionElement.value = '';
-    imagesInputElement.value = '';
+  priceInputElement.value = '';
+  priceInputElement.setAttribute('placeholder', '5000');
+
+  selectSelectElement(typeHousingSelectElement);
+  selectSelectElement(timeInSelectElement);
+  selectSelectElement(timeOutSelectElement);
+  selectSelectElement(typeHousingSelectElement, 1);
+  selectSelectElement(roomNumberSelectElement);
+  selectSelectElement(capacitySelectElement, 2);
+  featuresInputList.forEach((element) => element.checked = false);
+  descriptionElement.value = '';
+  imagesInputElement.value = '';
 };
 
 const onResetFormNotice = (evt) => {
   evt.preventDefault();
   resetallInputsFormNotice();
   initAddressMarker();
+  // TODO:
   // - фильтрация (состояние фильтров и отфильтрованные метки) сбрасывается;
   resetAllFilters();
   resetFilteredMarkers();
@@ -141,7 +142,7 @@ typeHousingSelectElement.addEventListener('change', onTypeHousingChange);
 priceInputElement.addEventListener('invalid', onPriceInputValidation);
 roomNumberSelectElement.addEventListener('change', onRoomNumberValidation);
 formNoticeElement.addEventListener('submit', onSubmitFormNotice);
-formNoticeElement.addEventListener('reset', onResetFormNotice)
+formNoticeElement.addEventListener('reset', onResetFormNotice);
 
 const formMapFiltersElement = document.querySelector('.map__filters');
 
@@ -152,21 +153,21 @@ const setInactiveStateFormNotice = () => {
   fieldsetListElement.forEach((fieldset) => fieldset.setAttribute('disabled', true));
 };
 
-const setActiveStateFormNotice = (map) => {
+const setActiveStateFormMapFilters = () => {
   const mapFiltersElement = formMapFiltersElement.querySelectorAll('.map__filter');
   mapFiltersElement.forEach((mapFilter) => mapFilter.removeAttribute('disabled'));
 
   const mapFeaturesElement = formMapFiltersElement.querySelector('#housing-features');
   mapFeaturesElement.removeAttribute('disabled');
   formMapFiltersElement.classList.remove('map__filters--disabled');
-
-  setAddressInput(map.getCenter());
 };
 
-const setActiveStateFormMapFilters = () => {
+const setActiveStateFormNotice = (map) => {
   const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
   fieldsetListElement.forEach((fieldset) => fieldset.removeAttribute('disabled'));
   formNoticeElement.classList.remove('ad-form--disabled');
+
+  setAddressInput(map.getCenter());
 };
 
 const setInactiveStateFormMapFilters = () => {
