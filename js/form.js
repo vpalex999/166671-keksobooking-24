@@ -82,18 +82,19 @@ const onRoomNumberValidation = (evt) => {
   setCapacity(roomsNumber);
 };
 
-titleInputElement.addEventListener('invalid', onTitleInputValidation);
-typeHousingElement.addEventListener('change', onTypeHousingChange);
-priceInputElement.addEventListener('invalid', onPriceInputValidation);
-roomNumberElement.addEventListener('change', onRoomNumberValidation);
-
-formNoticeElement.addEventListener('submit', (evt) => {
+const onSubmitFormNotice = (evt) => {
   evt.preventDefault();
   sendData(
     displayError,
     new FormData(evt.target),
   );
-});
+};
+
+titleInputElement.addEventListener('invalid', onTitleInputValidation);
+typeHousingElement.addEventListener('change', onTypeHousingChange);
+priceInputElement.addEventListener('invalid', onPriceInputValidation);
+roomNumberElement.addEventListener('change', onRoomNumberValidation);
+formNoticeElement.addEventListener('submit', onSubmitFormNotice);
 
 const formMapFiltersElement = document.querySelector('.map__filters');
 
