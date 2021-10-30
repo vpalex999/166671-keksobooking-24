@@ -1,17 +1,25 @@
 import { getMinimalPriceFromTypeHousing, latLngToAddress } from './util.js';
 import { displayError } from './error.js';
 import { sendData } from './api.js';
+import { initAddressMarker} from './map.js';
 
 const formNoticeElement = document.querySelector('.ad-form');
+const avatarInputElement = formNoticeElement.querySelector('#avatar');
 const titleInputElement = formNoticeElement.querySelector('#title');
 const addressInputElement = formNoticeElement.querySelector('#address');
-const typeHousingElement = formNoticeElement.querySelector('#type');
+const typeHousingSelectElement = formNoticeElement.querySelector('#type');
+const timeInSelectElement = formNoticeElement.querySelector('#timein');
+const timeOutSelectElement = formNoticeElement.querySelector('#timeout');
 const priceInputElement = formNoticeElement.querySelector('#price');
-const roomNumberElement = formNoticeElement.querySelector('#room_number');
-const capacityElement = formNoticeElement.querySelector('#capacity');
+const roomNumberSelectElement = formNoticeElement.querySelector('#room_number');
+const capacitySelectElement = formNoticeElement.querySelector('#capacity');
+const featuresInputList = formNoticeElement.querySelectorAll('.features input');
+const descriptionElement = formNoticeElement.querySelector('#description');
+const imagesInputElement = formNoticeElement.querySelector('#images');
+
 
 const setCapacity = (rooms) => {
-  const capacityListElement = capacityElement.querySelectorAll('option');
+  const capacityListElement = capacitySelectElement.querySelectorAll('option');
 
   capacityListElement.forEach((capacity) => {
     capacity.style.display = 'none';
@@ -90,31 +98,50 @@ const onSubmitFormNotice = (evt) => {
   );
 };
 
-const onResetFormNotice = (evt) => {
+// TODO:
+// перенести selectSelectElement функцию в утилиты
+const selectSelectElement = (selectElement, indexOption=0) => {
+  const listElement = selectElement.querySelectorAll('option');
+  listElement.forEach((element) => element.removeAttribute('selected'));
+  selectElement.value = '';
+  listElement[indexOption].selected = 'selected';
+};
 
-  console.log('is event reset!');
+const resetallInputsFormNotice = () => {
+  avatarInputElement.value = '';
+    titleInputElement.value = '';
+  
+    priceInputElement.value = '';
+    priceInputElement.setAttribute('placeholder', '5000');
+
+    selectSelectElement(typeHousingSelectElement);
+    selectSelectElement(timeInSelectElement);
+    selectSelectElement(timeOutSelectElement);
+    selectSelectElement(typeHousingSelectElement, 1);
+    selectSelectElement(roomNumberSelectElement);
+    selectSelectElement(capacitySelectElement, 2);
+    featuresInputList.forEach((element) => element.checked = false);
+    descriptionElement.value = '';
+    imagesInputElement.value = '';
+};
+
+const onResetFormNotice = (evt) => {
+  evt.preventDefault();
+  resetallInputsFormNotice();
+  initAddressMarker();
+  // - фильтрация (состояние фильтров и отфильтрованные метки) сбрасывается;
+  resetAllFilters();
+  resetFilteredMarkers();
+  // - если на карте был показан балун, то он должен быть скрыт.
+  hideAllBallons();
 };
 
 titleInputElement.addEventListener('invalid', onTitleInputValidation);
-typeHousingElement.addEventListener('change', onTypeHousingChange);
+typeHousingSelectElement.addEventListener('change', onTypeHousingChange);
 priceInputElement.addEventListener('invalid', onPriceInputValidation);
-roomNumberElement.addEventListener('change', onRoomNumberValidation);
+roomNumberSelectElement.addEventListener('change', onRoomNumberValidation);
 formNoticeElement.addEventListener('submit', onSubmitFormNotice);
-
-const setResetFormNotice = () => {
-  // TODO: 2.5
-  formNoticeElement.addEventListener('reset', (evt) => {
-    // - все заполненные поля возвращаются в изначальное состояние;
-    evt.preventDefault();
-    // - фильтрация (состояние фильтров и отфильтрованные метки) сбрасывается;
-    // - метка адреса возвращается в исходное положение;
-    // resetMainMarker()
-    // - значение поля адреса корректируется соответственно исходному положению метки;
-    // - если на карте был показан балун, то он должен быть скрыт.
-
-  });
-
-};
+formNoticeElement.addEventListener('reset', onResetFormNotice)
 
 const formMapFiltersElement = document.querySelector('.map__filters');
 

@@ -1,11 +1,16 @@
 import { setAddressInput } from './form.js';
 import { createCardElement } from './template.js';
 
-const map = L.map('map-canvas')
-  .setView({
+const INIT_POINT = {
+  LatLng: {
     lat: 35.68950,
     lng: 139.69171,
-  }, 10);
+  },
+  Zoom: 10,
+};
+
+const map = L.map('map-canvas')
+  .setView(INIT_POINT.LatLng, INIT_POINT.Zoom);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -27,11 +32,8 @@ const regularPinIcon = L.icon({
   iconAnchor: [20, 40],
 });
 
-const mainPinMarker = L.marker(
-  {
-    lat: 35.6895,
-    lng: 139.69171,
-  },
+const addressMarker = L.marker(
+  INIT_POINT.LatLng,
   {
     draggable: true,
     icon: mainPinIcon,
@@ -57,11 +59,21 @@ const onAddressInput = (evt) => {
   setAddressInput(evt.target.getLatLng());
 };
 
-mainPinMarker.addTo(map);
-mainPinMarker.addEventListener('moveend', onAddressInput);
+addressMarker.addTo(map);
+addressMarker.addEventListener('moveend', onAddressInput);
+
+const setMapView = () => {
+  map.setView(INIT_POINT.LatLng, INIT_POINT.Zoom);
+};
+
+const initAddressMarker = () => {
+  setMapView();
+  addressMarker.setLatLng(INIT_POINT.LatLng);
+  setAddressInput(addressMarker.getLatLng());
+};
 
 const displayNoticeList = (noticeList) => {
   noticeList.forEach((notice) => createCustomRegularMarker(notice));
 };
 
-export { map, displayNoticeList };
+export { map, displayNoticeList, initAddressMarker };
