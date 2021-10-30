@@ -90,11 +90,31 @@ const onSubmitFormNotice = (evt) => {
   );
 };
 
+const onResetFormNotice = (evt) => {
+
+  console.log('is event reset!');
+};
+
 titleInputElement.addEventListener('invalid', onTitleInputValidation);
 typeHousingElement.addEventListener('change', onTypeHousingChange);
 priceInputElement.addEventListener('invalid', onPriceInputValidation);
 roomNumberElement.addEventListener('change', onRoomNumberValidation);
 formNoticeElement.addEventListener('submit', onSubmitFormNotice);
+
+const setResetFormNotice = () => {
+  // TODO: 2.5
+  formNoticeElement.addEventListener('reset', (evt) => {
+    // - все заполненные поля возвращаются в изначальное состояние;
+    evt.preventDefault();
+    // - фильтрация (состояние фильтров и отфильтрованные метки) сбрасывается;
+    // - метка адреса возвращается в исходное положение;
+    // resetMainMarker()
+    // - значение поля адреса корректируется соответственно исходному положению метки;
+    // - если на карте был показан балун, то он должен быть скрыт.
+
+  });
+
+};
 
 const formMapFiltersElement = document.querySelector('.map__filters');
 
