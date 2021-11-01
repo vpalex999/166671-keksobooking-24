@@ -63,10 +63,26 @@ const latLngToAddress = (latLng) => {
   return `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
 };
 
+const selectSelectElement = (selectElement, indexOption = 0) => {
+  const listElement = selectElement.querySelectorAll('option');
+  listElement.forEach((element) => element.removeAttribute('selected'));
+  selectElement.value = '';
+  listElement[indexOption].selected = 'selected';
+};
+
+const resetCheckboxListElement = (checkboxListElement) => {
+  checkboxListElement.forEach((element) => element.checked = false);
+};
+
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
 export {
   getRandomInteger,
   getRandomFloat,
   getMinimalPriceFromTypeHousing,
   getNameOfPlace,
-  latLngToAddress
+  latLngToAddress,
+  selectSelectElement,
+  resetCheckboxListElement,
+  isEscapeKey
 };

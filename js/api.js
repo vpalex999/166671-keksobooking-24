@@ -15,7 +15,7 @@ const getData = (onSucces, onFail) => {
     .catch((error) => onFail(`Ошибка получения данных. ${error}`));
 };
 
-const sendData = (onFail, body) => {
+const sendData = (onSucces, onFail, body) => {
   fetch(
     'https://24.javascript.pages.academy/keksobooking',
     {
@@ -25,9 +25,10 @@ const sendData = (onFail, body) => {
   )
     .then((response) => {
       if (response.ok) {
-        return response;
+        onSucces();
+      } else {
+        throw new Error(`${response.status} - ${response.statusText}`);
       }
-      throw new Error(`${response.status} - ${response.statusText}`);
     })
     .catch((error) => onFail(`Не удалось отправить данные. ${error}`));
 };

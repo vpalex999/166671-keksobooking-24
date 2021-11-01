@@ -1,6 +1,8 @@
 import { setAddressInput } from './form.js';
 import { createCardElement } from './template.js';
 
+const dataMarkerList = [];
+
 const INIT_POINT = {
   LatLng: {
     lat: 35.68950,
@@ -73,7 +75,14 @@ const initAddressMarker = () => {
 };
 
 const displayNoticeList = (noticeList) => {
-  noticeList.forEach((notice) => createCustomRegularMarker(notice));
+
+  noticeList.forEach((notice) => {
+    const marker = createCustomRegularMarker(notice);
+    dataMarkerList.push(marker);
+  });
 };
 
-export { map, displayNoticeList, initAddressMarker };
+const closeAllPopup = () => dataMarkerList.forEach((marker) => marker.closePopup());
+
+
+export { map, displayNoticeList, initAddressMarker, closeAllPopup };
