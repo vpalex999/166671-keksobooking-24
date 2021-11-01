@@ -96,4 +96,16 @@ const createCardElement = (notice) => {
   return cardElement;
 };
 
-export { createCardElement };
+const createSuccesModalElement = () => {
+  const successTemplateElement = document.querySelector('#success').content.querySelector('.success');
+  const successElement = successTemplateElement.cloneNode(true);
+  return successElement;
+};
+
+const createErrorModalElement = () => {
+  const errorTemplateElement = document.querySelector('#error').content.querySelector('.error');
+  const errorModalElement = errorTemplateElement.cloneNode(true);
+  return errorModalElement;
+};
+
+export { createCardElement, createSuccesModalElement, createErrorModalElement };

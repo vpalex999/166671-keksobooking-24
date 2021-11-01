@@ -1,15 +1,32 @@
-import { getMinimalPriceFromTypeHousing, latLngToAddress } from './util.js';
+import {
+  getMinimalPriceFromTypeHousing,
+  latLngToAddress,
+  selectSelectElement,
+  resetCheckboxListElement
+} from './util.js';
+import { sendData } from './api.js';
+import { closeAllPopup, initAddressMarker } from './map.js';
+import { setActiveStateFormMapFilters, setInactiveStateFormMapFilters, resetFormFilters } from './form-filters.js';
+import { openSuccessModal } from './succes-modal.js';
+import { openErrorModal } from './error-modal.js';
 
 const formNoticeElement = document.querySelector('.ad-form');
+const avatarInputElement = formNoticeElement.querySelector('#avatar');
 const titleInputElement = formNoticeElement.querySelector('#title');
 const addressInputElement = formNoticeElement.querySelector('#address');
-const typeHousingElement = formNoticeElement.querySelector('#type');
+const typeHousingSelectElement = formNoticeElement.querySelector('#type');
+const timeInSelectElement = formNoticeElement.querySelector('#timein');
+const timeOutSelectElement = formNoticeElement.querySelector('#timeout');
 const priceInputElement = formNoticeElement.querySelector('#price');
-const roomNumberElement = formNoticeElement.querySelector('#room_number');
-const capacityElement = formNoticeElement.querySelector('#capacity');
+const roomNumberSelectElement = formNoticeElement.querySelector('#room_number');
+const capacitySelectElement = formNoticeElement.querySelector('#capacity');
+const featuresCheckboxList = formNoticeElement.querySelectorAll('.features input');
+const descriptionElement = formNoticeElement.querySelector('#description');
+const imagesInputElement = formNoticeElement.querySelector('#images');
+
 
 const setCapacity = (rooms) => {
-  const capacityListElement = capacityElement.querySelectorAll('option');
+  const capacityListElement = capacitySelectElement.querySelectorAll('option');
 
   capacityListElement.forEach((capacity) => {
     capacity.style.display = 'none';
@@ -40,21 +57,41 @@ const setCapacity = (rooms) => {
   }
 };
 
-const setInactiveStateFormNotice = () => {
-  formNoticeElement.classList.add('ad-form--disabled');
-
-  const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
-  fieldsetListElement.forEach((fieldset) => fieldset.setAttribute('disabled', true));
-};
-
-const setActiveStateFormMapFilters = () => {
-  const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
-  fieldsetListElement.forEach((fieldset) => fieldset.removeAttribute('disabled'));
-  formNoticeElement.classList.remove('ad-form--disabled');
-};
-
 const setAddressInput = (lanLng) => {
   addressInputElement.value = latLngToAddress(lanLng);
+};
+
+const resetFormNotice = () => {
+  avatarInputElement.value = '';
+  titleInputElement.value = '';
+
+  priceInputElement.value = '';
+  priceInputElement.setAttribute('placeholder', '5000');
+
+  selectSelectElement(typeHousingSelectElement);
+  selectSelectElement(timeInSelectElement);
+  selectSelectElement(timeOutSelectElement);
+  selectSelectElement(typeHousingSelectElement, 1);
+  selectSelectElement(roomNumberSelectElement);
+  selectSelectElement(capacitySelectElement, 2);
+  resetCheckboxListElement(featuresCheckboxList);
+
+  descriptionElement.value = '';
+  imagesInputElement.value = '';
+};
+
+const doSuccesSendForm = () => {
+  openSuccessModal();
+  initAddressMarker();
+  resetFormNotice();
+  resetFormFilters();
+  closeAllPopup();
+  // TODO:
+  // - фильтрация (отфильтрованные метки) сбрасывается;
+};
+
+const doErrorSendForm = () => {
+  openErrorModal();
 };
 
 const onTitleInputValidation = () => {
@@ -93,31 +130,41 @@ const onRoomNumberValidation = (evt) => {
   setCapacity(roomsNumber);
 };
 
+const onSubmitFormNotice = (evt) => {
+  evt.preventDefault();
+  sendData(
+    doSuccesSendForm,
+    doErrorSendForm,
+    new FormData(evt.target),
+  );
+};
+
+const onResetFormNotice = (evt) => {
+  evt.preventDefault();
+  initAddressMarker();
+  resetFormNotice();
+  resetFormFilters();
+  closeAllPopup();
+};
+
 titleInputElement.addEventListener('invalid', onTitleInputValidation);
-typeHousingElement.addEventListener('change', onTypeHousingChange);
+typeHousingSelectElement.addEventListener('change', onTypeHousingChange);
 priceInputElement.addEventListener('invalid', onPriceInputValidation);
-roomNumberElement.addEventListener('change', onRoomNumberValidation);
+roomNumberSelectElement.addEventListener('change', onRoomNumberValidation);
+formNoticeElement.addEventListener('submit', onSubmitFormNotice);
+formNoticeElement.addEventListener('reset', onResetFormNotice);
 
+const setInactiveStateFormNotice = () => {
+  formNoticeElement.classList.add('ad-form--disabled');
 
-const formMapFiltersElement = document.querySelector('.map__filters');
-
-const setInactiveStateFormMapFilters = () => {
-  formMapFiltersElement.classList.add('map__filters--disabled');
-  const mapFiltersElement = formMapFiltersElement.querySelectorAll('.map__filter');
-  mapFiltersElement.forEach((mapFilter) => mapFilter.setAttribute('disabled', true));
-
-  const mapFeaturesElement = formMapFiltersElement.querySelector('#housing-features');
-  mapFeaturesElement.setAttribute('disabled', true);
+  const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
+  fieldsetListElement.forEach((fieldset) => fieldset.setAttribute('disabled', true));
 };
 
 const setActiveStateFormNotice = (map) => {
-  const mapFiltersElement = formMapFiltersElement.querySelectorAll('.map__filter');
-  mapFiltersElement.forEach((mapFilter) => mapFilter.removeAttribute('disabled'));
-
-  const mapFeaturesElement = formMapFiltersElement.querySelector('#housing-features');
-  mapFeaturesElement.removeAttribute('disabled');
-  formMapFiltersElement.classList.remove('map__filters--disabled');
-
+  const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
+  fieldsetListElement.forEach((fieldset) => fieldset.removeAttribute('disabled'));
+  formNoticeElement.classList.remove('ad-form--disabled');
   setAddressInput(map.getCenter());
 };
 
@@ -125,7 +172,6 @@ const setInactiveState = () => {
   setInactiveStateFormMapFilters();
   setInactiveStateFormNotice();
 };
-
 
 const setActiveState = (map) => {
   setActiveStateFormMapFilters();

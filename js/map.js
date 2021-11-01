@@ -1,13 +1,18 @@
-import { setActiveState, setInactiveState, setAddressInput } from './form.js';
+import { setAddressInput } from './form.js';
 import { createCardElement } from './template.js';
 
-setInactiveState();
+const dataMarkerList = [];
 
-const map = L.map('map-canvas')
-  .setView({
+const INIT_POINT = {
+  LatLng: {
     lat: 35.68950,
     lng: 139.69171,
-  }, 10);
+  },
+  Zoom: 10,
+};
+
+const map = L.map('map-canvas')
+  .setView(INIT_POINT.LatLng, INIT_POINT.Zoom);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -29,11 +34,8 @@ const regularPinIcon = L.icon({
   iconAnchor: [20, 40],
 });
 
-const mainPinMarker = L.marker(
-  {
-    lat: 35.6895,
-    lng: 139.69171,
-  },
+const addressMarker = L.marker(
+  INIT_POINT.LatLng,
   {
     draggable: true,
     icon: mainPinIcon,
@@ -41,22 +43,17 @@ const mainPinMarker = L.marker(
 );
 
 
-const getRegularMarker = (fromAddress) => {
-  const latLng = fromAddress.split(',').map((item) => item.trim());
-  const [lat, lng] = latLng;
-  return L.marker(
-    {
-      lat: lat,
-      lng: lng,
-    },
+const getRegularMarker = ({ location }) =>
+  L.marker(
+    location,
     {
       icon: regularPinIcon,
     },
   );
-};
+
 
 const createCustomRegularMarker = (notice) =>
-  getRegularMarker(notice.offer.address)
+  getRegularMarker(notice)
     .addTo(map)
     .bindPopup(createCardElement(notice));
 
@@ -64,8 +61,28 @@ const onAddressInput = (evt) => {
   setAddressInput(evt.target.getLatLng());
 };
 
-map.on('load', setActiveState(map));
-mainPinMarker.addTo(map);
-mainPinMarker.addEventListener('moveend', onAddressInput);
+addressMarker.addTo(map);
+addressMarker.addEventListener('moveend', onAddressInput);
 
-export { createCustomRegularMarker };
+const setMapView = () => {
+  map.setView(INIT_POINT.LatLng, INIT_POINT.Zoom);
+};
+
+const initAddressMarker = () => {
+  setMapView();
+  addressMarker.setLatLng(INIT_POINT.LatLng);
+  setAddressInput(addressMarker.getLatLng());
+};
+
+const displayNoticeList = (noticeList) => {
+
+  noticeList.forEach((notice) => {
+    const marker = createCustomRegularMarker(notice);
+    dataMarkerList.push(marker);
+  });
+};
+
+const closeAllPopup = () => dataMarkerList.forEach((marker) => marker.closePopup());
+
+
+export { map, displayNoticeList, initAddressMarker, closeAllPopup };

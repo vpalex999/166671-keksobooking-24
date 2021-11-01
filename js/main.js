@@ -1,6 +1,8 @@
-import { createCustomRegularMarker } from './map.js';
-import { createWizardNotice } from './data.js';
+import { map, displayNoticeList } from './map.js';
+import { setActiveState, setInactiveState } from './form.js';
+import { getData } from './api.js';
+import { displayError } from './error.js';
 
-const noticeList = Array.from({length: 5}, createWizardNotice);
-noticeList.map((notice) => createCustomRegularMarker(notice));
-
+setInactiveState();
+map.on('load', setActiveState(map));
+getData(displayNoticeList, displayError);
