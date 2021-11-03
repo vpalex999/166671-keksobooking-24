@@ -1,16 +1,20 @@
-import { map, layer, displayNoticeList } from './map.js';
+import { map, displayNoticeList } from './map.js';
 import { setActiveState, setActiveStateFormMapFilters } from './form.js';
 import { getData } from './api.js';
 import { displayError } from './error.js';
 
-const onLoadMap = () => {
-  setActiveState(map);
-  getData(
-    (noticeList) => {
-      displayNoticeList(noticeList);
-      setActiveStateFormMapFilters();
-    },
-    (message) => displayError(message));
+const MAXIMUM_DISPLAY_NOTICE = 10;
+
+
+const onLoadData = (noticeList) => {
+  setActiveStateFormMapFilters();
+  const cutNoticeList = noticeList.slice(0, MAXIMUM_DISPLAY_NOTICE);
+  displayNoticeList(cutNoticeList);
 };
 
-layer.on('load', onLoadMap);
+const onLoadMap = () => {
+  setActiveState(map);
+  getData(onLoadData, displayError);
+};
+
+map.whenReady(onLoadMap);
