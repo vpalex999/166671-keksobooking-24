@@ -1,4 +1,4 @@
-import { setAddressInput } from './form.js';
+import { setInactiveState, setAddressInput } from './form.js';
 import { createCardElement } from './template.js';
 
 const dataMarkerList = [];
@@ -11,10 +11,12 @@ const INIT_POINT = {
   Zoom: 10,
 };
 
+setInactiveState();
+
 const map = L.map('map-canvas')
   .setView(INIT_POINT.LatLng, INIT_POINT.Zoom);
 
-L.tileLayer(
+const layer = L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -85,4 +87,4 @@ const displayNoticeList = (noticeList) => {
 const closeAllPopup = () => dataMarkerList.forEach((marker) => marker.closePopup());
 
 
-export { map, displayNoticeList, initAddressMarker, closeAllPopup };
+export { map, layer, displayNoticeList, initAddressMarker, closeAllPopup };

@@ -174,12 +174,12 @@ const setInactiveState = () => {
 };
 
 const setActiveState = (map) => {
-  setActiveStateFormMapFilters();
   setActiveStateFormNotice(map);
 };
 
 export {
   setInactiveState,
   setActiveState,
-  setAddressInput
+  setAddressInput,
+  setActiveStateFormMapFilters
 };
