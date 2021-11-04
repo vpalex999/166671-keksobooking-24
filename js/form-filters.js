@@ -1,4 +1,4 @@
-import { getMarkerDataList, displayMarkerList } from './map.js';
+import { getMarkerDataList, displaySelectedMarkerList } from './map.js';
 import { debounce } from './utils/debounce.js';
 import {
   selectSelectElement,
@@ -106,7 +106,7 @@ const onFilter = () => {
     .then(filterHousingRooms)
     .then(filterHousingGuests)
     .then(filterHousingFeatures)
-    .then(displayMarkerList);
+    .then(displaySelectedMarkerList);
 };
 
 const setOnFilterClick = (cb) => () => cb();

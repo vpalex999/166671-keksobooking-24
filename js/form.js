@@ -5,7 +5,7 @@ import {
   resetCheckboxListElement
 } from './util.js';
 import { sendData } from './api.js';
-import { closeAllPopup, initAddressMarker } from './map.js';
+import { closeAllPopup, initAddressMarker, displayInitData } from './map.js';
 import { setActiveStateFormMapFilters, setInactiveStateFormMapFilters, resetFormFilters } from './form-filters.js';
 import { openSuccessModal } from './succes-modal.js';
 import { openErrorModal } from './error-modal.js';
@@ -78,6 +78,8 @@ const resetFormNotice = () => {
 
   descriptionElement.value = '';
   imagesInputElement.value = '';
+
+  displayInitData();
 };
 
 const doSuccesSendForm = () => {
@@ -86,8 +88,6 @@ const doSuccesSendForm = () => {
   resetFormNotice();
   resetFormFilters();
   closeAllPopup();
-  // TODO:
-  // - фильтрация (отфильтрованные метки) сбрасывается;
 };
 
 const doErrorSendForm = () => {

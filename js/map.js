@@ -1,7 +1,11 @@
 import { setInactiveState, setAddressInput } from './form.js';
 import { createCardElement } from './template.js';
 
+const MAXIMUM_DISPLAY_NOTICE = 10;
+
+
 const dataMarkerList = [];
+const getMarkerDataList = () => [...dataMarkerList];
 
 const INIT_POINT = {
   LatLng: {
@@ -56,7 +60,6 @@ const getRegularMarker = ({ location }) =>
 
 const createCustomRegularMarker = (notice) =>
   getRegularMarker(notice)
-    .addTo(map)
     .bindPopup(createCardElement(notice));
 
 const onAddressInput = (evt) => {
@@ -76,15 +79,54 @@ const initAddressMarker = () => {
   setAddressInput(addressMarker.getLatLng());
 };
 
-const displayNoticeList = (noticeList) => {
-
-  noticeList.forEach((notice) => {
-    const marker = createCustomRegularMarker(notice);
-    dataMarkerList.push(marker);
-  });
-};
 
 const closeAllPopup = () => dataMarkerList.forEach((marker) => marker.closePopup());
 
+const displaySelectedMarkerList = (markerList) => {
+  closeAllPopup();
+  dataMarkerList.forEach((marker) => {
+    const isMarkerDisplay = markerList
+      .slice(0, MAXIMUM_DISPLAY_NOTICE)
+      .includes(marker);
 
-export { map, displayNoticeList, initAddressMarker, closeAllPopup };
+    if (isMarkerDisplay) {
+      marker.addTo(map);
+    } else {
+      marker.remove();
+    }
+  });
+};
+
+const displayInitData = () => {
+  if (dataMarkerList.length > MAXIMUM_DISPLAY_NOTICE) {
+    dataMarkerList
+      .slice(MAXIMUM_DISPLAY_NOTICE)
+      .forEach((marker) => marker.remove());
+  }
+  dataMarkerList
+    .slice(0, MAXIMUM_DISPLAY_NOTICE)
+    .forEach((marker) => marker.addTo(map));
+};
+
+const initMarkerList = (noticeList) => {
+  noticeList.forEach((notice) => {
+    const marker = createCustomRegularMarker(notice);
+    dataMarkerList.push(marker);
+    displayInitData();
+  });
+};
+
+const initData = (noticeList) => {
+  initMarkerList(noticeList);
+  displayInitData();
+};
+
+export {
+  map,
+  initData,
+  displayInitData,
+  initAddressMarker,
+  closeAllPopup,
+  displaySelectedMarkerList,
+  getMarkerDataList
+};
