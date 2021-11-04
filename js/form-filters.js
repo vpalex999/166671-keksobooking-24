@@ -1,4 +1,5 @@
 import { getMarkerDataList, displayMarkerList } from './map.js';
+import { debounce } from './utils/debounce.js';
 import {
   selectSelectElement,
   resetCheckboxListElement,
@@ -108,7 +109,9 @@ const onFilter = () => {
     .then(displayMarkerList);
 };
 
-formMapFiltersElement.addEventListener('change', onFilter);
+const setOnFilterClick = (cb) => () => cb();
+
+formMapFiltersElement.addEventListener('change', setOnFilterClick(debounce(onFilter)));
 
 const setActiveStateFormMapFilters = () => {
   const mapFiltersElement = formMapFiltersElement.querySelectorAll('.map__filter');
