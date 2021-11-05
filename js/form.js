@@ -5,7 +5,7 @@ import {
   resetCheckboxListElement
 } from './util.js';
 import { sendData } from './api.js';
-import { closeAllPopup, initAddressMarker, displayInitData } from './map.js';
+import { getMap, closeAllPopup, resetAddressMarker, displayInitData } from './map.js';
 import { setActiveStateFormMapFilters, setInactiveStateFormMapFilters, resetFormFilters } from './form-filters.js';
 import { openSuccessModal } from './succes-modal.js';
 import { openErrorModal } from './error-modal.js';
@@ -84,7 +84,7 @@ const resetFormNotice = () => {
 
 const doSuccesSendForm = () => {
   openSuccessModal();
-  initAddressMarker();
+  resetAddressMarker();
   resetFormNotice();
   resetFormFilters();
   closeAllPopup();
@@ -141,7 +141,7 @@ const onSubmitFormNotice = (evt) => {
 
 const onResetFormNotice = (evt) => {
   evt.preventDefault();
-  initAddressMarker();
+  resetAddressMarker();
   resetFormNotice();
   resetFormFilters();
   closeAllPopup();
@@ -161,11 +161,11 @@ const setInactiveStateFormNotice = () => {
   fieldsetListElement.forEach((fieldset) => fieldset.setAttribute('disabled', true));
 };
 
-const setActiveStateFormNotice = (map) => {
+const setActiveStateFormNotice = () => {
   const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
   fieldsetListElement.forEach((fieldset) => fieldset.removeAttribute('disabled'));
   formNoticeElement.classList.remove('ad-form--disabled');
-  setAddressInput(map.getCenter());
+  setAddressInput(getMap().getCenter());
 };
 
 const setInactiveState = () => {
@@ -173,8 +173,8 @@ const setInactiveState = () => {
   setInactiveStateFormNotice();
 };
 
-const setActiveState = (map) => {
-  setActiveStateFormNotice(map);
+const setActiveState = () => {
+  setActiveStateFormNotice();
 };
 
 export {
