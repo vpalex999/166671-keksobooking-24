@@ -125,6 +125,14 @@ const onPriceInputValidation = () => {
   }
 };
 
+const onTimeInChange = (evt) => {
+  timeOutSelectElement.value = evt.target.value;
+};
+
+const onTimeOutChange = (evt) => {
+  timeInSelectElement.value = evt.target.value;
+};
+
 const onRoomNumberValidation = (evt) => {
   const roomsNumber = Number(evt.target.value);
   setCapacity(roomsNumber);
@@ -150,6 +158,8 @@ const onResetFormNotice = (evt) => {
 titleInputElement.addEventListener('invalid', onTitleInputValidation);
 typeHousingSelectElement.addEventListener('change', onTypeHousingChange);
 priceInputElement.addEventListener('invalid', onPriceInputValidation);
+timeInSelectElement.addEventListener('change', onTimeInChange);
+timeOutSelectElement.addEventListener('change', onTimeOutChange);
 roomNumberSelectElement.addEventListener('change', onRoomNumberValidation);
 formNoticeElement.addEventListener('submit', onSubmitFormNotice);
 formNoticeElement.addEventListener('reset', onResetFormNotice);
