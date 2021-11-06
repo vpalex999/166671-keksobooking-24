@@ -57,8 +57,9 @@ const createCardElement = (notice) => {
   }
 
   const featuresElement = cardElement.querySelector('.popup__features');
+
+  const featureListElement = featuresElement.querySelectorAll('.popup__feature');
   if (notice.offer && notice.offer.features) {
-    const featureListElement = featuresElement.querySelectorAll('.popup__feature');
     featureListElement.forEach((featureElement) => {
       const isNecessary = notice.offer.features.some(
         (noticeFeature) => featureElement.classList.contains(`popup__feature--${noticeFeature}`),
@@ -68,7 +69,7 @@ const createCardElement = (notice) => {
       }
     });
   } else {
-    hideElement(featuresElement);
+    featureListElement.forEach((element) => featuresElement.removeChild(element));
   }
 
   const descriptionElement = cardElement.querySelector('.popup__description');

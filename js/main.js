@@ -1,8 +1,5 @@
-import { map, displayNoticeList } from './map.js';
-import { setActiveState, setInactiveState } from './form.js';
-import { getData } from './api.js';
-import { displayError } from './error.js';
+import { initMap } from './map.js';
+import { setInactiveState } from './form.js';
 
 setInactiveState();
-map.on('load', setActiveState(map));
-getData(displayNoticeList, displayError);
+initMap();

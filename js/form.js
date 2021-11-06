@@ -5,7 +5,7 @@ import {
   resetCheckboxListElement
 } from './util.js';
 import { sendData } from './api.js';
-import { closeAllPopup, initAddressMarker } from './map.js';
+import { getMap, closeAllPopup, resetAddressMarker, displayInitData } from './map.js';
 import { setActiveStateFormMapFilters, setInactiveStateFormMapFilters, resetFormFilters } from './form-filters.js';
 import { openSuccessModal } from './succes-modal.js';
 import { openErrorModal } from './error-modal.js';
@@ -78,16 +78,16 @@ const resetFormNotice = () => {
 
   descriptionElement.value = '';
   imagesInputElement.value = '';
+
+  displayInitData();
 };
 
 const doSuccesSendForm = () => {
   openSuccessModal();
-  initAddressMarker();
+  resetAddressMarker();
   resetFormNotice();
   resetFormFilters();
   closeAllPopup();
-  // TODO:
-  // - фильтрация (отфильтрованные метки) сбрасывается;
 };
 
 const doErrorSendForm = () => {
@@ -125,6 +125,14 @@ const onPriceInputValidation = () => {
   }
 };
 
+const onTimeInChange = (evt) => {
+  timeOutSelectElement.value = evt.target.value;
+};
+
+const onTimeOutChange = (evt) => {
+  timeInSelectElement.value = evt.target.value;
+};
+
 const onRoomNumberValidation = (evt) => {
   const roomsNumber = Number(evt.target.value);
   setCapacity(roomsNumber);
@@ -141,7 +149,7 @@ const onSubmitFormNotice = (evt) => {
 
 const onResetFormNotice = (evt) => {
   evt.preventDefault();
-  initAddressMarker();
+  resetAddressMarker();
   resetFormNotice();
   resetFormFilters();
   closeAllPopup();
@@ -150,6 +158,8 @@ const onResetFormNotice = (evt) => {
 titleInputElement.addEventListener('invalid', onTitleInputValidation);
 typeHousingSelectElement.addEventListener('change', onTypeHousingChange);
 priceInputElement.addEventListener('invalid', onPriceInputValidation);
+timeInSelectElement.addEventListener('change', onTimeInChange);
+timeOutSelectElement.addEventListener('change', onTimeOutChange);
 roomNumberSelectElement.addEventListener('change', onRoomNumberValidation);
 formNoticeElement.addEventListener('submit', onSubmitFormNotice);
 formNoticeElement.addEventListener('reset', onResetFormNotice);
@@ -161,11 +171,11 @@ const setInactiveStateFormNotice = () => {
   fieldsetListElement.forEach((fieldset) => fieldset.setAttribute('disabled', true));
 };
 
-const setActiveStateFormNotice = (map) => {
+const setActiveStateFormNotice = () => {
   const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
   fieldsetListElement.forEach((fieldset) => fieldset.removeAttribute('disabled'));
   formNoticeElement.classList.remove('ad-form--disabled');
-  setAddressInput(map.getCenter());
+  setAddressInput(getMap().getCenter());
 };
 
 const setInactiveState = () => {
@@ -173,13 +183,13 @@ const setInactiveState = () => {
   setInactiveStateFormNotice();
 };
 
-const setActiveState = (map) => {
-  setActiveStateFormMapFilters();
-  setActiveStateFormNotice(map);
+const setActiveState = () => {
+  setActiveStateFormNotice();
 };
 
 export {
   setInactiveState,
   setActiveState,
-  setAddressInput
+  setAddressInput,
+  setActiveStateFormMapFilters
 };

@@ -54,7 +54,22 @@ const getNameOfPlace = (type) => {
     case 'hotel':
       return 'Отель';
     default:
-      return `Неизвестный тип помещения: ${type}`;
+      return 'Любой тип жилья';
+  }
+};
+
+const getNameOfPrice = (valuePrice) => {
+  switch (valuePrice) {
+    case 'any':
+      return 'Любая';
+    case 'middle':
+      return [10000, 49999];
+    case 'low':
+      return [0, 9999];
+    case 'high':
+      return [50000, 1000000];
+    default:
+      return 'Любая';
   }
 };
 
@@ -81,6 +96,7 @@ export {
   getRandomFloat,
   getMinimalPriceFromTypeHousing,
   getNameOfPlace,
+  getNameOfPrice,
   latLngToAddress,
   selectSelectElement,
   resetCheckboxListElement,
