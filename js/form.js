@@ -10,7 +10,11 @@ import { setActiveStateFormMapFilters, setInactiveStateFormMapFilters, resetForm
 import { openSuccessModal } from './succes-modal.js';
 import { openErrorModal } from './error-modal.js';
 
+const LOAD_FILE_TYPES = ['png', 'jpg'];
+const DEFAULT_AVATAR_IMAGE = 'img/muffin-grey.svg';
+
 const formNoticeElement = document.querySelector('.ad-form');
+const previewAvatarElement = formNoticeElement.querySelector('.ad-form-header__preview img');
 const avatarInputElement = formNoticeElement.querySelector('#avatar');
 const titleInputElement = formNoticeElement.querySelector('#title');
 const addressInputElement = formNoticeElement.querySelector('#address');
@@ -23,6 +27,7 @@ const capacitySelectElement = formNoticeElement.querySelector('#capacity');
 const featuresCheckboxList = formNoticeElement.querySelectorAll('.features input');
 const descriptionElement = formNoticeElement.querySelector('#description');
 const imagesInputElement = formNoticeElement.querySelector('#images');
+const previewHouseElement = formNoticeElement.querySelector('.ad-form__photo');
 
 
 const setCapacity = (rooms) => {
@@ -62,6 +67,7 @@ const setAddressInput = (lanLng) => {
 };
 
 const resetFormNotice = () => {
+  previewAvatarElement.src = DEFAULT_AVATAR_IMAGE;
   avatarInputElement.value = '';
   titleInputElement.value = '';
 
@@ -78,6 +84,7 @@ const resetFormNotice = () => {
 
   descriptionElement.value = '';
   imagesInputElement.value = '';
+  previewHouseElement.style.backgroundImage = '';
 
   displayInitData();
 };
@@ -93,6 +100,30 @@ const doSuccesSendForm = () => {
 const doErrorSendForm = () => {
   openErrorModal();
 };
+
+const onAvatarImagePreview = () => {
+  const file = avatarInputElement.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matchers = LOAD_FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matchers) {
+    previewAvatarElement.src = URL.createObjectURL(file);
+  }
+};
+
+const onHouseImagePreview = () => {
+  const file = imagesInputElement.files[0];
+  const fileName = file.name.toLowerCase();
+  const matchers = LOAD_FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matchers) {
+    previewHouseElement.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
+    previewHouseElement.style.backgroundSize = 'cover';
+  }
+
+};
+
 
 const onTitleInputValidation = () => {
   if (titleInputElement.validity.tooShort) {
@@ -155,12 +186,14 @@ const onResetFormNotice = (evt) => {
   closeAllPopup();
 };
 
+avatarInputElement.addEventListener('change', onAvatarImagePreview);
 titleInputElement.addEventListener('invalid', onTitleInputValidation);
 typeHousingSelectElement.addEventListener('change', onTypeHousingChange);
 priceInputElement.addEventListener('invalid', onPriceInputValidation);
 timeInSelectElement.addEventListener('change', onTimeInChange);
 timeOutSelectElement.addEventListener('change', onTimeOutChange);
 roomNumberSelectElement.addEventListener('change', onRoomNumberValidation);
+imagesInputElement.addEventListener('change', onHouseImagePreview);
 formNoticeElement.addEventListener('submit', onSubmitFormNotice);
 formNoticeElement.addEventListener('reset', onResetFormNotice);
 
