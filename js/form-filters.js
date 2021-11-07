@@ -98,8 +98,8 @@ const filterHousingFeatures = ((markerList) => {
 });
 
 const onFilter = () => {
-  const myPromise = new Promise((resolve) => resolve());
-  myPromise
+  const filterPromise = new Promise((resolve) => resolve());
+  filterPromise
     .then(getMarkerDataList)
     .then(filterHousingType)
     .then(filterHousingPrice)
@@ -109,9 +109,9 @@ const onFilter = () => {
     .then(displaySelectedMarkerList);
 };
 
-const setOnFilterClick = (cb) => () => cb();
+const onCallbackReturn = (cb) => () => cb();
 
-formMapFiltersElement.addEventListener('change', setOnFilterClick(debounce(onFilter)));
+formMapFiltersElement.addEventListener('change', onCallbackReturn(debounce(onFilter)));
 
 const setActiveStateFormMapFilters = () => {
   const mapFiltersElement = formMapFiltersElement.querySelectorAll('.map__filter');
