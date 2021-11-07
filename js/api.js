@@ -11,9 +11,7 @@ const getData = (onSucces, onFail) => {
       throw new Error(`${response.status} - ${response.statusText}`);
     })
     .then((response) => response.json())
-    .then((noticeList) => {
-      onSucces(noticeList);
-    })
+    .then((noticeList) => onSucces(noticeList))
     .catch((error) => onFail(`Ошибка получения данных. ${error}`));
 };
 

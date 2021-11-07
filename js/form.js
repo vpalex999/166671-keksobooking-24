@@ -30,7 +30,7 @@ const imagesInputElement = formNoticeElement.querySelector('#images');
 const previewHouseElement = formNoticeElement.querySelector('.ad-form__photo');
 
 
-const setCapacity = (rooms) => {
+const setCapacity = (roomList) => {
   const capacityListElement = capacitySelectElement.querySelectorAll('option');
 
   capacityListElement.forEach((capacity) => {
@@ -38,7 +38,7 @@ const setCapacity = (rooms) => {
     capacity.removeAttribute('selected');
   });
 
-  if (rooms === 100) {
+  if (roomList === 100) {
     capacityListElement.forEach((capacity) => {
       const capacityNums = Number(capacity.value);
       if (capacityNums === 0) {
@@ -48,7 +48,7 @@ const setCapacity = (rooms) => {
   } else {
     capacityListElement.forEach((capacity) => {
       const capacityNums = Number(capacity.value);
-      if (rooms >= capacityNums && capacityNums !== 0) {
+      if (roomList >= capacityNums && capacityNums !== 0) {
         capacity.style.display = '';
       }
     });
@@ -62,9 +62,7 @@ const setCapacity = (rooms) => {
   }
 };
 
-const setAddressInput = (lanLng) => {
-  addressInputElement.value = latLngToAddress(lanLng);
-};
+const setAddressInput = (lanLng) => addressInputElement.value = latLngToAddress(lanLng);
 
 const resetFormNotice = () => {
   previewAvatarElement.src = DEFAULT_AVATAR_IMAGE;
@@ -97,9 +95,7 @@ const doSuccesSendForm = () => {
   closeAllPopup();
 };
 
-const doErrorSendForm = () => {
-  openErrorModal();
-};
+const doErrorSendForm = () => openErrorModal();
 
 const onAvatarImagePreview = () => {
   const file = avatarInputElement.files[0];
@@ -123,7 +119,6 @@ const onHouseImagePreview = () => {
   }
 
 };
-
 
 const onTitleInputValidation = () => {
   if (titleInputElement.validity.tooShort) {
@@ -156,13 +151,9 @@ const onPriceInputValidation = () => {
   }
 };
 
-const onTimeInChange = (evt) => {
-  timeOutSelectElement.value = evt.target.value;
-};
+const onTimeInChange = (evt) => timeOutSelectElement.value = evt.target.value;
 
-const onTimeOutChange = (evt) => {
-  timeInSelectElement.value = evt.target.value;
-};
+const onTimeOutChange = (evt) => timeInSelectElement.value = evt.target.value;
 
 const onRoomNumberValidation = (evt) => {
   const roomsNumber = Number(evt.target.value);
@@ -216,9 +207,7 @@ const setInactiveState = () => {
   setInactiveStateFormNotice();
 };
 
-const setActiveState = () => {
-  setActiveStateFormNotice();
-};
+const setActiveState = () => setActiveStateFormNotice();
 
 export {
   setInactiveState,
