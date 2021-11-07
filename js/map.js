@@ -8,7 +8,7 @@ const MAXIMUM_DISPLAY_NOTICE = 10;
 
 
 const dataMarkerList = [];
-const getMarkerDataList = () => [...dataMarkerList];
+const getMarkerDataList = () => dataMarkerList;
 
 const INIT_POINT = {
   LatLng: {
@@ -65,18 +65,14 @@ const createCustomRegularMarker = (notice) =>
   getRegularMarker(notice)
     .bindPopup(createCardElement(notice));
 
-const onAddressInput = (evt) => {
-  setAddressInput(evt.target.getLatLng());
-};
+const onAddressInput = (evt) => setAddressInput(evt.target.getLatLng());
 
 const initAddressMarker = () => {
   addressMarker.addTo(map);
   addressMarker.addEventListener('moveend', onAddressInput);
 };
 
-const setMapView = () => {
-  map.setView(INIT_POINT.LatLng, INIT_POINT.Zoom);
-};
+const setMapView = () => map.setView(INIT_POINT.LatLng, INIT_POINT.Zoom);
 
 const resetAddressMarker = () => {
   setMapView();
@@ -103,14 +99,13 @@ const displaySelectedMarkerList = (markerList) => {
 };
 
 const displayInitData = () => {
-  if (dataMarkerList.length > MAXIMUM_DISPLAY_NOTICE) {
-    dataMarkerList
-      .slice(MAXIMUM_DISPLAY_NOTICE)
-      .forEach((marker) => marker.remove());
-  }
   dataMarkerList
     .slice(0, MAXIMUM_DISPLAY_NOTICE)
     .forEach((marker) => marker.addTo(map));
+
+  dataMarkerList
+    .slice(MAXIMUM_DISPLAY_NOTICE)
+    .forEach((marker) => marker.remove());
 };
 
 const initMarkerList = (noticeList) => {

@@ -3,9 +3,7 @@ import { isEscapeKey } from './util.js';
 
 const succesModalElement = createSuccesModalElement();
 
-const onClickSuccesModal = (evt) => {
-  document.body.removeChild(evt.target);
-};
+const onClickSuccesModal = (evt) => document.body.removeChild(evt.target);
 
 const onEscapeSuccesModal = (evt) => {
   if (isEscapeKey(evt)) {
