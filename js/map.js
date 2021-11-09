@@ -6,20 +6,20 @@ import { getData } from './api.js';
 
 const MAXIMUM_DISPLAY_NOTICE = 10;
 
-
-const dataMarkerList = [];
-const getMarkerDataList = () => dataMarkerList;
-
-const INIT_POINT = {
-  LatLng: {
+const InitPoint = {
+  LAT_LNG: {
     lat: 35.68950,
     lng: 139.69171,
   },
-  Zoom: 10,
+  ZOOM: 10,
 };
 
+const dataMarkerList = [];
+
+const getMarkerDataList = () => dataMarkerList;
+
 const map = L.map('map-canvas')
-  .setView(INIT_POINT.LatLng, INIT_POINT.Zoom);
+  .setView(InitPoint.LAT_LNG, InitPoint.ZOOM);
 
 const loadOpenstreetMap = () => {
   L.tileLayer(
@@ -44,7 +44,7 @@ const regularPinIcon = L.icon({
 });
 
 const addressMarker = L.marker(
-  INIT_POINT.LatLng,
+  InitPoint.LAT_LNG,
   {
     draggable: true,
     icon: mainPinIcon,
@@ -72,11 +72,11 @@ const initAddressMarker = () => {
   addressMarker.addEventListener('moveend', onAddressInput);
 };
 
-const setMapView = () => map.setView(INIT_POINT.LatLng, INIT_POINT.Zoom);
+const setMapView = () => map.setView(InitPoint.LAT_LNG, InitPoint.ZOOM);
 
 const resetAddressMarker = () => {
   setMapView();
-  addressMarker.setLatLng(INIT_POINT.LatLng);
+  addressMarker.setLatLng(InitPoint.LAT_LNG);
   setAddressInput(addressMarker.getLatLng());
 };
 
