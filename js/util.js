@@ -61,7 +61,9 @@ const selectSelectElement = (selectElement, indexOption = 0) => {
 };
 
 const resetCheckboxListElement = (checkboxListElement) => {
-  checkboxListElement.forEach((element) => element.checked = false);
+  checkboxListElement.forEach((element) => {
+    element.checked = false;
+  });
 };
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
