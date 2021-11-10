@@ -55,7 +55,10 @@ const latLngToAddress = (latLng) => {
 
 const selectSelectElement = (selectElement, indexOption = 0) => {
   const listElement = selectElement.querySelectorAll('option');
-  listElement.forEach((element) => element.removeAttribute('selected'));
+  listElement.forEach((element) => {
+    element.selected = false;
+  });
+
   selectElement.value = '';
   listElement[indexOption].selected = 'selected';
 };

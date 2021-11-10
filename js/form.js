@@ -36,7 +36,7 @@ const setCapacity = (roomList) => {
 
   capacityListElement.forEach((capacity) => {
     capacity.style.display = 'none';
-    capacity.removeAttribute('selected');
+    capacity.selected = false;
   });
 
   if (roomList === NUMBER_ROOMS) {
@@ -57,7 +57,7 @@ const setCapacity = (roomList) => {
 
   for (const capacity of capacityListElement) {
     if (capacity.style.display !== 'none') {
-      capacity.setAttribute('selected', 'selected');
+      capacity.selected = true;
       break;
     }
   }
@@ -71,7 +71,7 @@ const resetFormNotice = () => {
   titleInputElement.value = '';
 
   priceInputElement.value = '';
-  priceInputElement.setAttribute('placeholder', '5000');
+  priceInputElement.placeholder = '5000';
 
   selectSelectElement(typeHousingSelectElement);
   selectSelectElement(timeInSelectElement);
@@ -135,13 +135,13 @@ const onTitleInputValidation = () => {
 
 const onTypeHousingChange = (evt) => {
   const price = getMinimalPriceFromTypeHousing(evt.target.value);
-  priceInputElement.setAttribute('placeholder', price);
-  priceInputElement.setAttribute('min', price);
+  priceInputElement.placeholder = price;
+  priceInputElement.min = price;
 };
 
 const onPriceInputValidation = () => {
   if (priceInputElement.validity.rangeUnderflow) {
-    const minimalPrice = priceInputElement.getAttribute('min');
+    const minimalPrice = priceInputElement.min;
     priceInputElement.setCustomValidity(`Цена за ночь не должна быть меньше ${minimalPrice}`);
   } else if (priceInputElement.validity.rangeOverflow) {
     priceInputElement.setCustomValidity('Цена за ночь не должна превышать значения 1000000');
@@ -193,12 +193,17 @@ const setInactiveStateFormNotice = () => {
   formNoticeElement.classList.add('ad-form--disabled');
 
   const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
-  fieldsetListElement.forEach((fieldset) => fieldset.setAttribute('disabled', true));
+  fieldsetListElement.forEach((fieldset) => {
+    fieldset.disabled = true;
+  });
 };
 
 const setActiveStateFormNotice = () => {
   const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
-  fieldsetListElement.forEach((fieldset) => fieldset.removeAttribute('disabled'));
+  fieldsetListElement.forEach((fieldset) => {
+    fieldset.disabled = false;
+  });
+
   formNoticeElement.classList.remove('ad-form--disabled');
   setAddressInput(getMap().getCenter());
 };

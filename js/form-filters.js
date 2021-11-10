@@ -106,10 +106,12 @@ formMapFiltersElement.addEventListener('change', onCallbackReturn(debounce(onFil
 
 const setActiveStateFormMapFilters = () => {
   const mapFiltersElement = formMapFiltersElement.querySelectorAll('.map__filter');
-  mapFiltersElement.forEach((mapFilter) => mapFilter.removeAttribute('disabled'));
+  mapFiltersElement.forEach((mapFilter) => {
+    mapFilter.disabled = false;
+  });
 
   const mapFeaturesElement = formMapFiltersElement.querySelector('#housing-features');
-  mapFeaturesElement.removeAttribute('disabled');
+  mapFeaturesElement.disabled = false;
   formMapFiltersElement.classList.remove('map__filters--disabled');
 };
 
@@ -124,10 +126,12 @@ const resetFormFilters = () => {
 const setInactiveStateFormMapFilters = () => {
   formMapFiltersElement.classList.add('map__filters--disabled');
   const mapFiltersElement = formMapFiltersElement.querySelectorAll('.map__filter');
-  mapFiltersElement.forEach((mapFilter) => mapFilter.setAttribute('disabled', true));
+  mapFiltersElement.forEach((mapFilter) => {
+    mapFilter.disabled = true;
+  });
 
   const mapFeaturesElement = formMapFiltersElement.querySelector('#housing-features');
-  mapFeaturesElement.setAttribute('disabled', true);
+  mapFeaturesElement.disabled = true;
 };
 
 export { setActiveStateFormMapFilters, setInactiveStateFormMapFilters, resetFormFilters };
