@@ -29,6 +29,7 @@ const descriptionElement = formNoticeElement.querySelector('#description');
 const imagesInputElement = formNoticeElement.querySelector('#images');
 const previewHouseElement = formNoticeElement.querySelector('.ad-form__photo');
 
+const NUMBER_ROOMS = 100;
 
 const setCapacity = (roomList) => {
   const capacityListElement = capacitySelectElement.querySelectorAll('option');
@@ -38,7 +39,7 @@ const setCapacity = (roomList) => {
     capacity.removeAttribute('selected');
   });
 
-  if (roomList === 100) {
+  if (roomList === NUMBER_ROOMS) {
     capacityListElement.forEach((capacity) => {
       const capacityNums = Number(capacity.value);
       if (capacityNums === 0) {

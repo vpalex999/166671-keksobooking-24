@@ -5,6 +5,17 @@ import { displayError } from './error.js';
 import { getData } from './api.js';
 
 const MAXIMUM_DISPLAY_NOTICE = 10;
+const MAIN_PIN_ICON_SIZE_POINT_X = 52;
+const MAIN_PIN_ICON_SIZE_POINT_Y = 52;
+
+const MAIN_PIN_ICON_ANCOR_POINT_X = 26;
+const MAIN_PIN_ICON_ANCOR_POINT_Y = 26;
+
+const REGULAR_ICON_SIZE_POINT_X = 40;
+const REGULAR_ICON_SIZE_POINT_Y = 40;
+
+const REGULAR_ICON_ANCOR_POINT_X = 20;
+const REGULAR_ICON_ANCOR_POINT_Y = 40;
 
 const InitPoint = {
   LAT_LNG: {
@@ -33,14 +44,14 @@ const loadOpenstreetMap = () => {
 
 const mainPinIcon = L.icon({
   iconUrl: '../img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconSize: [MAIN_PIN_ICON_SIZE_POINT_X, MAIN_PIN_ICON_SIZE_POINT_Y],
+  iconAnchor: [MAIN_PIN_ICON_ANCOR_POINT_X, MAIN_PIN_ICON_ANCOR_POINT_Y],
 });
 
 const regularPinIcon = L.icon({
   iconUrl: '../img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconSize: [REGULAR_ICON_SIZE_POINT_X, REGULAR_ICON_SIZE_POINT_Y],
+  iconAnchor: [REGULAR_ICON_ANCOR_POINT_X, REGULAR_ICON_ANCOR_POINT_Y],
 });
 
 const addressMarker = L.marker(

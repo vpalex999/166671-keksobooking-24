@@ -7,6 +7,8 @@ import {
   getNameOfPrice
 } from './util.js';
 
+const ANY = 'any';
+
 const formMapFiltersElement = document.querySelector('.map__filters');
 
 const housingTypeSelectElement = formMapFiltersElement.querySelector('#housing-type');
@@ -23,7 +25,7 @@ const getPopupContentElement = (marker, selector) => marker
 
 const filterHousingType = (marker) => {
   const value = housingTypeSelectElement.value;
-  if (value === 'any') {
+  if (value === ANY) {
     return true;
   }
   const element = getPopupContentElement(marker, '.popup__type');
@@ -32,7 +34,7 @@ const filterHousingType = (marker) => {
 
 const filterHousingPrice = (marker) => {
   const value = housingPriceSelectElement.value;
-  if (value === 'any') {
+  if (value === ANY) {
     return true;
   }
   const element = getPopupContentElement(marker, '.popup__text--price');
@@ -43,7 +45,7 @@ const filterHousingPrice = (marker) => {
 
 const filterHousingRooms = (marker) => {
   const value = housingRoomsSelectElement.value;
-  if (value === 'any') {
+  if (value === ANY) {
     return true;
   }
   const element = getPopupContentElement(marker, '.popup__text--capacity');
@@ -52,7 +54,7 @@ const filterHousingRooms = (marker) => {
 
 const filterHousingGuests = (marker) => {
   const value = housingGuestsSelectElement.value;
-  if (value === 'any') {
+  if (value === ANY) {
     return true;
   }
   const element = getPopupContentElement(marker, '.popup__text--capacity');
