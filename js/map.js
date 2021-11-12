@@ -25,9 +25,9 @@ const InitPoint = {
   ZOOM: 10,
 };
 
-const dataMarkerList = [];
+const markers = [];
 
-const getMarkerDataList = () => dataMarkerList;
+const getMarkerDataList = () => markers;
 
 const map = L.map('map-canvas')
   .setView(InitPoint.LAT_LNG, InitPoint.ZOOM);
@@ -92,11 +92,11 @@ const resetAddressMarker = () => {
 };
 
 
-const closeAllPopup = () => dataMarkerList.forEach((marker) => marker.closePopup());
+const closeAllPopup = () => markers.forEach((marker) => marker.closePopup());
 
 const displaySelectedMarkerList = (markerList) => {
   closeAllPopup();
-  dataMarkerList.forEach((marker) => {
+  markers.forEach((marker) => {
     const isMarkerDisplay = markerList
       .slice(0, MAXIMUM_DISPLAY_NOTICE)
       .includes(marker);
@@ -110,11 +110,11 @@ const displaySelectedMarkerList = (markerList) => {
 };
 
 const displayInitData = () => {
-  dataMarkerList
+  markers
     .slice(0, MAXIMUM_DISPLAY_NOTICE)
     .forEach((marker) => marker.addTo(map));
 
-  dataMarkerList
+  markers
     .slice(MAXIMUM_DISPLAY_NOTICE)
     .forEach((marker) => marker.remove());
 };
@@ -122,7 +122,7 @@ const displayInitData = () => {
 const initMarkerList = (noticeList) => {
   noticeList.forEach((notice) => {
     const marker = createCustomRegularMarker(notice);
-    dataMarkerList.push(marker);
+    markers.push(marker);
     displayInitData();
   });
 };
