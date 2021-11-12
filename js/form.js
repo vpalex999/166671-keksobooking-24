@@ -21,7 +21,7 @@ import {
 import { openSuccessModal } from './succes-modal.js';
 import { openErrorModal } from './error-modal.js';
 
-const LOAD_FILE_TYPES = ['png', 'jpg'];
+const FILE_TYPES = ['png', 'jpg'];
 const DEFAULT_AVATAR_IMAGE = 'img/muffin-grey.svg';
 const NUMBER_ROOMS = 100;
 
@@ -121,7 +121,7 @@ const onAvatarImagePreview = () => {
   const file = avatarInputElement.files[0];
   const fileName = file.name.toLowerCase();
 
-  const matchers = LOAD_FILE_TYPES.some((it) => fileName.endsWith(it));
+  const matchers = FILE_TYPES.some((it) => fileName.endsWith(it));
 
   if (matchers) {
     previewAvatarElement.src = URL.createObjectURL(file);
@@ -131,7 +131,7 @@ const onAvatarImagePreview = () => {
 const onHouseImagePreview = () => {
   const file = imagesInputElement.files[0];
   const fileName = file.name.toLowerCase();
-  const matchers = LOAD_FILE_TYPES.some((it) => fileName.endsWith(it));
+  const matchers = FILE_TYPES.some((it) => fileName.endsWith(it));
 
   if (matchers) {
     previewHouseElement.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
