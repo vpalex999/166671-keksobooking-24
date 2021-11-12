@@ -1,15 +1,22 @@
+const HousingType = {
+  FLAT: 'flat',
+  BUNGALOW: 'bungalow',
+  HOUSE: 'house',
+  PALACE: 'palace',
+  HOTEL: 'hotel',
+};
 
 const getMinimalPriceFromTypeHousing = (nameType) => {
   switch (nameType) {
-    case 'flat':
+    case HousingType.FLAT:
       return 1000;
-    case 'bungalow':
+    case HousingType.BUNGALOW:
       return 0;
-    case 'house':
+    case HousingType.HOUSE:
       return 5000;
-    case 'palace':
+    case HousingType.PALACE:
       return 10000;
-    case 'hotel':
+    case HousingType.HOTEL:
       return 3000;
     default:
       return 0;
@@ -18,15 +25,15 @@ const getMinimalPriceFromTypeHousing = (nameType) => {
 
 const getNameOfPlace = (type) => {
   switch (type) {
-    case 'flat':
+    case HousingType.FLAT:
       return 'Квартира';
-    case 'bungalow':
+    case HousingType.BUNGALOW:
       return 'Бунгало';
-    case 'house':
+    case HousingType.HOUSE:
       return 'Дом';
-    case 'palace':
+    case HousingType.PALACE:
       return 'Дворец';
-    case 'hotel':
+    case HousingType.HOTEL:
       return 'Отель';
     default:
       return 'Любой тип жилья';
@@ -60,7 +67,7 @@ const selectSelectElement = (selectElement, indexOption = 0) => {
   });
 
   selectElement.value = '';
-  listElement[indexOption].selected = 'selected';
+  listElement[indexOption].selected = true;
 };
 
 const resetCheckboxListElement = (checkboxListElement) => {
@@ -71,6 +78,8 @@ const resetCheckboxListElement = (checkboxListElement) => {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
+const loadHousingType = () => HousingType;
+
 export {
   getMinimalPriceFromTypeHousing,
   getNameOfPlace,
@@ -78,5 +87,6 @@ export {
   latLngToAddress,
   selectSelectElement,
   resetCheckboxListElement,
-  isEscapeKey
+  isEscapeKey,
+  loadHousingType
 };

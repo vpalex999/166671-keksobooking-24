@@ -1,6 +1,8 @@
 import { getNameOfPlace } from './util.js';
 
-const hideElement = (element) => element.style.display = 'none';
+const hideElement = (element) => {
+  element.style.display = 'none';
+};
 
 const createCardElement = (notice) => {
 

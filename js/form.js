@@ -2,16 +2,28 @@ import {
   getMinimalPriceFromTypeHousing,
   latLngToAddress,
   selectSelectElement,
-  resetCheckboxListElement
+  resetCheckboxListElement,
+  loadHousingType
 } from './util.js';
 import { sendData } from './api.js';
-import { getMap, closeAllPopup, resetAddressMarker, displayInitData } from './map.js';
-import { setActiveStateFormMapFilters, setInactiveStateFormMapFilters, resetFormFilters } from './form-filters.js';
+import {
+  getMap,
+  closeAllPopup,
+  resetAddressMarker,
+  displayInitData
+} from './map.js';
+import {
+  setActiveStateFormMapFilters,
+  setInactiveStateFormMapFilters,
+  resetFormFilters
+} from './form-filters.js';
+
 import { openSuccessModal } from './succes-modal.js';
 import { openErrorModal } from './error-modal.js';
 
 const LOAD_FILE_TYPES = ['png', 'jpg'];
 const DEFAULT_AVATAR_IMAGE = 'img/muffin-grey.svg';
+const NUMBER_ROOMS = 100;
 
 const formNoticeElement = document.querySelector('.ad-form');
 const previewAvatarElement = formNoticeElement.querySelector('.ad-form-header__preview img');
@@ -28,8 +40,6 @@ const featuresCheckboxList = formNoticeElement.querySelectorAll('.features input
 const descriptionElement = formNoticeElement.querySelector('#description');
 const imagesInputElement = formNoticeElement.querySelector('#images');
 const previewHouseElement = formNoticeElement.querySelector('.ad-form__photo');
-
-const NUMBER_ROOMS = 100;
 
 const setCapacity = (roomList) => {
   const capacityListElement = capacitySelectElement.querySelectorAll('option');
@@ -63,22 +73,31 @@ const setCapacity = (roomList) => {
   }
 };
 
-const setAddressInput = (lanLng) => addressInputElement.value = latLngToAddress(lanLng);
+const setAddressInput = (lanLng) => {
+  addressInputElement.value = latLngToAddress(lanLng);
+};
+
+const setPriceInputElement = (price) => {
+  priceInputElement.value = '';
+  priceInputElement.placeholder = price;
+  priceInputElement.min = price;
+};
 
 const resetFormNotice = () => {
   previewAvatarElement.src = DEFAULT_AVATAR_IMAGE;
   avatarInputElement.value = '';
   titleInputElement.value = '';
 
-  priceInputElement.value = '';
-  priceInputElement.placeholder = '5000';
+  selectSelectElement(typeHousingSelectElement, 1);
+  const flatPrice = getMinimalPriceFromTypeHousing(loadHousingType().FLAT);
+  setPriceInputElement(flatPrice);
 
-  selectSelectElement(typeHousingSelectElement);
   selectSelectElement(timeInSelectElement);
   selectSelectElement(timeOutSelectElement);
-  selectSelectElement(typeHousingSelectElement, 1);
+
   selectSelectElement(roomNumberSelectElement);
-  selectSelectElement(capacitySelectElement, 2);
+  setCapacity(roomNumberSelectElement.value);
+
   resetCheckboxListElement(featuresCheckboxList);
 
   descriptionElement.value = '';
@@ -118,7 +137,6 @@ const onHouseImagePreview = () => {
     previewHouseElement.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
     previewHouseElement.style.backgroundSize = 'cover';
   }
-
 };
 
 const onTitleInputValidation = () => {
@@ -135,8 +153,7 @@ const onTitleInputValidation = () => {
 
 const onTypeHousingChange = (evt) => {
   const price = getMinimalPriceFromTypeHousing(evt.target.value);
-  priceInputElement.placeholder = price;
-  priceInputElement.min = price;
+  setPriceInputElement(price);
 };
 
 const onPriceInputValidation = () => {
@@ -152,9 +169,13 @@ const onPriceInputValidation = () => {
   }
 };
 
-const onTimeInChange = (evt) => timeOutSelectElement.value = evt.target.value;
+const onTimeInChange = (evt) => {
+  timeOutSelectElement.value = evt.target.value;
+};
 
-const onTimeOutChange = (evt) => timeInSelectElement.value = evt.target.value;
+const onTimeOutChange = (evt) => {
+  timeInSelectElement.value = evt.target.value;
+};
 
 const onRoomNumberValidation = (evt) => {
   const roomsNumber = Number(evt.target.value);
@@ -163,11 +184,7 @@ const onRoomNumberValidation = (evt) => {
 
 const onSubmitFormNotice = (evt) => {
   evt.preventDefault();
-  sendData(
-    doSuccesSendForm,
-    doErrorSendForm,
-    new FormData(evt.target),
-  );
+  sendData(doSuccesSendForm, doErrorSendForm, new FormData(evt.target));
 };
 
 const onResetFormNotice = (evt) => {
@@ -199,6 +216,7 @@ const setInactiveStateFormNotice = () => {
 };
 
 const setActiveStateFormNotice = () => {
+  resetFormNotice();
   const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
   fieldsetListElement.forEach((fieldset) => {
     fieldset.disabled = false;
