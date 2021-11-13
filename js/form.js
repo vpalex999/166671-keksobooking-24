@@ -2,16 +2,28 @@ import {
   getMinimalPriceFromTypeHousing,
   latLngToAddress,
   selectSelectElement,
-  resetCheckboxListElement
+  resetCheckboxListElement,
+  loadHousingType
 } from './util.js';
 import { sendData } from './api.js';
-import { getMap, closeAllPopup, resetAddressMarker, displayInitData } from './map.js';
-import { setActiveStateFormMapFilters, setInactiveStateFormMapFilters, resetFormFilters } from './form-filters.js';
+import {
+  getMap,
+  closeAllPopup,
+  resetAddressMarker,
+  displayInitData
+} from './map.js';
+import {
+  setActiveStateFormMapFilters,
+  setInactiveStateFormMapFilters,
+  resetFormFilters
+} from './form-filters.js';
+
 import { openSuccessModal } from './succes-modal.js';
 import { openErrorModal } from './error-modal.js';
 
-const LOAD_FILE_TYPES = ['png', 'jpg'];
+const FILE_TYPES = ['png', 'jpg'];
 const DEFAULT_AVATAR_IMAGE = 'img/muffin-grey.svg';
+const NUMBER_ROOMS = 100;
 
 const formNoticeElement = document.querySelector('.ad-form');
 const previewAvatarElement = formNoticeElement.querySelector('.ad-form-header__preview img');
@@ -29,16 +41,15 @@ const descriptionElement = formNoticeElement.querySelector('#description');
 const imagesInputElement = formNoticeElement.querySelector('#images');
 const previewHouseElement = formNoticeElement.querySelector('.ad-form__photo');
 
-
 const setCapacity = (roomList) => {
   const capacityListElement = capacitySelectElement.querySelectorAll('option');
 
   capacityListElement.forEach((capacity) => {
     capacity.style.display = 'none';
-    capacity.removeAttribute('selected');
+    capacity.selected = false;
   });
 
-  if (roomList === 100) {
+  if (roomList === NUMBER_ROOMS) {
     capacityListElement.forEach((capacity) => {
       const capacityNums = Number(capacity.value);
       if (capacityNums === 0) {
@@ -56,28 +67,37 @@ const setCapacity = (roomList) => {
 
   for (const capacity of capacityListElement) {
     if (capacity.style.display !== 'none') {
-      capacity.setAttribute('selected', 'selected');
+      capacity.selected = true;
       break;
     }
   }
 };
 
-const setAddressInput = (lanLng) => addressInputElement.value = latLngToAddress(lanLng);
+const setAddressInput = (lanLng) => {
+  addressInputElement.value = latLngToAddress(lanLng);
+};
+
+const setPriceInputElement = (price) => {
+  priceInputElement.value = '';
+  priceInputElement.placeholder = price;
+  priceInputElement.min = price;
+};
 
 const resetFormNotice = () => {
   previewAvatarElement.src = DEFAULT_AVATAR_IMAGE;
   avatarInputElement.value = '';
   titleInputElement.value = '';
 
-  priceInputElement.value = '';
-  priceInputElement.setAttribute('placeholder', '5000');
+  selectSelectElement(typeHousingSelectElement, 1);
+  const flatPrice = getMinimalPriceFromTypeHousing(loadHousingType().FLAT);
+  setPriceInputElement(flatPrice);
 
-  selectSelectElement(typeHousingSelectElement);
   selectSelectElement(timeInSelectElement);
   selectSelectElement(timeOutSelectElement);
-  selectSelectElement(typeHousingSelectElement, 1);
+
   selectSelectElement(roomNumberSelectElement);
-  selectSelectElement(capacitySelectElement, 2);
+  setCapacity(roomNumberSelectElement.value);
+
   resetCheckboxListElement(featuresCheckboxList);
 
   descriptionElement.value = '';
@@ -101,7 +121,7 @@ const onAvatarImagePreview = () => {
   const file = avatarInputElement.files[0];
   const fileName = file.name.toLowerCase();
 
-  const matchers = LOAD_FILE_TYPES.some((it) => fileName.endsWith(it));
+  const matchers = FILE_TYPES.some((it) => fileName.endsWith(it));
 
   if (matchers) {
     previewAvatarElement.src = URL.createObjectURL(file);
@@ -111,13 +131,12 @@ const onAvatarImagePreview = () => {
 const onHouseImagePreview = () => {
   const file = imagesInputElement.files[0];
   const fileName = file.name.toLowerCase();
-  const matchers = LOAD_FILE_TYPES.some((it) => fileName.endsWith(it));
+  const matchers = FILE_TYPES.some((it) => fileName.endsWith(it));
 
   if (matchers) {
     previewHouseElement.style.backgroundImage = `url('${URL.createObjectURL(file)}')`;
     previewHouseElement.style.backgroundSize = 'cover';
   }
-
 };
 
 const onTitleInputValidation = () => {
@@ -134,13 +153,12 @@ const onTitleInputValidation = () => {
 
 const onTypeHousingChange = (evt) => {
   const price = getMinimalPriceFromTypeHousing(evt.target.value);
-  priceInputElement.setAttribute('placeholder', price);
-  priceInputElement.setAttribute('min', price);
+  setPriceInputElement(price);
 };
 
 const onPriceInputValidation = () => {
   if (priceInputElement.validity.rangeUnderflow) {
-    const minimalPrice = priceInputElement.getAttribute('min');
+    const minimalPrice = priceInputElement.min;
     priceInputElement.setCustomValidity(`Цена за ночь не должна быть меньше ${minimalPrice}`);
   } else if (priceInputElement.validity.rangeOverflow) {
     priceInputElement.setCustomValidity('Цена за ночь не должна превышать значения 1000000');
@@ -151,9 +169,13 @@ const onPriceInputValidation = () => {
   }
 };
 
-const onTimeInChange = (evt) => timeOutSelectElement.value = evt.target.value;
+const onTimeInChange = (evt) => {
+  timeOutSelectElement.value = evt.target.value;
+};
 
-const onTimeOutChange = (evt) => timeInSelectElement.value = evt.target.value;
+const onTimeOutChange = (evt) => {
+  timeInSelectElement.value = evt.target.value;
+};
 
 const onRoomNumberValidation = (evt) => {
   const roomsNumber = Number(evt.target.value);
@@ -162,11 +184,7 @@ const onRoomNumberValidation = (evt) => {
 
 const onSubmitFormNotice = (evt) => {
   evt.preventDefault();
-  sendData(
-    doSuccesSendForm,
-    doErrorSendForm,
-    new FormData(evt.target),
-  );
+  sendData(doSuccesSendForm, doErrorSendForm, new FormData(evt.target));
 };
 
 const onResetFormNotice = (evt) => {
@@ -192,12 +210,18 @@ const setInactiveStateFormNotice = () => {
   formNoticeElement.classList.add('ad-form--disabled');
 
   const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
-  fieldsetListElement.forEach((fieldset) => fieldset.setAttribute('disabled', true));
+  fieldsetListElement.forEach((fieldset) => {
+    fieldset.disabled = true;
+  });
 };
 
 const setActiveStateFormNotice = () => {
+  resetFormNotice();
   const fieldsetListElement = formNoticeElement.querySelectorAll('fieldset');
-  fieldsetListElement.forEach((fieldset) => fieldset.removeAttribute('disabled'));
+  fieldsetListElement.forEach((fieldset) => {
+    fieldset.disabled = false;
+  });
+
   formNoticeElement.classList.remove('ad-form--disabled');
   setAddressInput(getMap().getCenter());
 };

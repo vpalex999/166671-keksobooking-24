@@ -1,15 +1,22 @@
+const HousingType = {
+  FLAT: 'flat',
+  BUNGALOW: 'bungalow',
+  HOUSE: 'house',
+  PALACE: 'palace',
+  HOTEL: 'hotel',
+};
 
 const getMinimalPriceFromTypeHousing = (nameType) => {
   switch (nameType) {
-    case 'flat':
+    case HousingType.FLAT:
       return 1000;
-    case 'bungalow':
+    case HousingType.BUNGALOW:
       return 0;
-    case 'house':
+    case HousingType.HOUSE:
       return 5000;
-    case 'palace':
+    case HousingType.PALACE:
       return 10000;
-    case 'hotel':
+    case HousingType.HOTEL:
       return 3000;
     default:
       return 0;
@@ -18,15 +25,15 @@ const getMinimalPriceFromTypeHousing = (nameType) => {
 
 const getNameOfPlace = (type) => {
   switch (type) {
-    case 'flat':
+    case HousingType.FLAT:
       return 'Квартира';
-    case 'bungalow':
+    case HousingType.BUNGALOW:
       return 'Бунгало';
-    case 'house':
+    case HousingType.HOUSE:
       return 'Дом';
-    case 'palace':
+    case HousingType.PALACE:
       return 'Дворец';
-    case 'hotel':
+    case HousingType.HOTEL:
       return 'Отель';
     default:
       return 'Любой тип жилья';
@@ -55,16 +62,23 @@ const latLngToAddress = (latLng) => {
 
 const selectSelectElement = (selectElement, indexOption = 0) => {
   const listElement = selectElement.querySelectorAll('option');
-  listElement.forEach((element) => element.removeAttribute('selected'));
+  listElement.forEach((element) => {
+    element.selected = false;
+  });
+
   selectElement.value = '';
-  listElement[indexOption].selected = 'selected';
+  listElement[indexOption].selected = true;
 };
 
 const resetCheckboxListElement = (checkboxListElement) => {
-  checkboxListElement.forEach((element) => element.checked = false);
+  checkboxListElement.forEach((element) => {
+    element.checked = false;
+  });
 };
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
+
+const loadHousingType = () => HousingType;
 
 export {
   getMinimalPriceFromTypeHousing,
@@ -73,5 +87,6 @@ export {
   latLngToAddress,
   selectSelectElement,
   resetCheckboxListElement,
-  isEscapeKey
+  isEscapeKey,
+  loadHousingType
 };

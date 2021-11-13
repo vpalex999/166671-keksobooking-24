@@ -5,21 +5,32 @@ import { displayError } from './error.js';
 import { getData } from './api.js';
 
 const MAXIMUM_DISPLAY_NOTICE = 10;
+const MAIN_PIN_ICON_SIZE_POINT_X = 52;
+const MAIN_PIN_ICON_SIZE_POINT_Y = 52;
 
+const MAIN_PIN_ICON_ANCHOR_POINT_X = 26;
+const MAIN_PIN_ICON_ANCHOR_POINT_Y = 26;
 
-const dataMarkerList = [];
-const getMarkerDataList = () => dataMarkerList;
+const REGULAR_ICON_SIZE_POINT_X = 40;
+const REGULAR_ICON_SIZE_POINT_Y = 40;
 
-const INIT_POINT = {
-  LatLng: {
+const REGULAR_ICON_ANCHOR_POINT_X = 20;
+const REGULAR_ICON_ANCHOR_POINT_Y = 40;
+
+const InitPoint = {
+  LAT_LNG: {
     lat: 35.68950,
     lng: 139.69171,
   },
-  Zoom: 10,
+  ZOOM: 10,
 };
 
+const markers = [];
+
+const getMarkerDataList = () => markers;
+
 const map = L.map('map-canvas')
-  .setView(INIT_POINT.LatLng, INIT_POINT.Zoom);
+  .setView(InitPoint.LAT_LNG, InitPoint.ZOOM);
 
 const loadOpenstreetMap = () => {
   L.tileLayer(
@@ -33,18 +44,18 @@ const loadOpenstreetMap = () => {
 
 const mainPinIcon = L.icon({
   iconUrl: '../img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
+  iconSize: [MAIN_PIN_ICON_SIZE_POINT_X, MAIN_PIN_ICON_SIZE_POINT_Y],
+  iconAnchor: [MAIN_PIN_ICON_ANCHOR_POINT_X, MAIN_PIN_ICON_ANCHOR_POINT_Y],
 });
 
 const regularPinIcon = L.icon({
   iconUrl: '../img/pin.svg',
-  iconSize: [40, 40],
-  iconAnchor: [20, 40],
+  iconSize: [REGULAR_ICON_SIZE_POINT_X, REGULAR_ICON_SIZE_POINT_Y],
+  iconAnchor: [REGULAR_ICON_ANCHOR_POINT_X, REGULAR_ICON_ANCHOR_POINT_Y],
 });
 
 const addressMarker = L.marker(
-  INIT_POINT.LatLng,
+  InitPoint.LAT_LNG,
   {
     draggable: true,
     icon: mainPinIcon,
@@ -72,20 +83,20 @@ const initAddressMarker = () => {
   addressMarker.addEventListener('moveend', onAddressInput);
 };
 
-const setMapView = () => map.setView(INIT_POINT.LatLng, INIT_POINT.Zoom);
+const setMapView = () => map.setView(InitPoint.LAT_LNG, InitPoint.ZOOM);
 
 const resetAddressMarker = () => {
   setMapView();
-  addressMarker.setLatLng(INIT_POINT.LatLng);
+  addressMarker.setLatLng(InitPoint.LAT_LNG);
   setAddressInput(addressMarker.getLatLng());
 };
 
 
-const closeAllPopup = () => dataMarkerList.forEach((marker) => marker.closePopup());
+const closeAllPopup = () => markers.forEach((marker) => marker.closePopup());
 
 const displaySelectedMarkerList = (markerList) => {
   closeAllPopup();
-  dataMarkerList.forEach((marker) => {
+  markers.forEach((marker) => {
     const isMarkerDisplay = markerList
       .slice(0, MAXIMUM_DISPLAY_NOTICE)
       .includes(marker);
@@ -99,11 +110,11 @@ const displaySelectedMarkerList = (markerList) => {
 };
 
 const displayInitData = () => {
-  dataMarkerList
+  markers
     .slice(0, MAXIMUM_DISPLAY_NOTICE)
     .forEach((marker) => marker.addTo(map));
 
-  dataMarkerList
+  markers
     .slice(MAXIMUM_DISPLAY_NOTICE)
     .forEach((marker) => marker.remove());
 };
@@ -111,7 +122,7 @@ const displayInitData = () => {
 const initMarkerList = (noticeList) => {
   noticeList.forEach((notice) => {
     const marker = createCustomRegularMarker(notice);
-    dataMarkerList.push(marker);
+    markers.push(marker);
     displayInitData();
   });
 };
