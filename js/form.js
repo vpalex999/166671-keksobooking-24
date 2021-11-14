@@ -1,3 +1,7 @@
+import { openSuccessModal } from './succes-modal.js';
+import { openErrorModal } from './error-modal.js';
+import { sendData } from './api.js';
+
 import {
   getMinimalPriceFromTypeHousing,
   latLngToAddress,
@@ -5,21 +9,20 @@ import {
   resetCheckboxListElement,
   loadHousingType
 } from './util.js';
-import { sendData } from './api.js';
+
 import {
   getMap,
   closeAllPopup,
   resetAddressMarker,
   displayInitData
 } from './map.js';
+
 import {
   setActiveStateFormMapFilters,
   setInactiveStateFormMapFilters,
   resetFormFilters
 } from './form-filters.js';
 
-import { openSuccessModal } from './succes-modal.js';
-import { openErrorModal } from './error-modal.js';
 
 const FILE_TYPES = ['png', 'jpg'];
 const DEFAULT_AVATAR_IMAGE = 'img/muffin-grey.svg';
